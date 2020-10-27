@@ -1,0 +1,31 @@
+@import '../../Assets/CSS/variables';
+
+
+#storePage { 
+
+
+    #storeBody { 
+      display: grid;
+      grid-template-columns: 20% 80%;
+        .storeMain { 
+          height: 100vh;
+          text-align: center;
+          padding-top: 8%;
+            #cashStatus { 
+              margin: 4em 0;
+              color: white;
+                h3 { 
+                  font-size: 4.3em;
+                  background-color: $secondarycolor;
+                  width: max-content;
+                  margin: 0 auto 0.3em auto;
+                  border-radius: 12px;
+                  padding: 0 0.4em;
+                }
+                p { 
+                  font-size: 1.2em;
+                }
+            }
+        }
+    }
+}

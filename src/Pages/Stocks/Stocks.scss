@@ -1,0 +1,19 @@
+@import '../../Assets/CSS/variables';
+
+#stocksPage { 
+    #stocksBody { 
+      display: grid;
+      grid-template-columns: 20% 80%;
+        .stocksMain { 
+          height: 100vh;
+          padding-top: 8%;
+
+          .top { 
+            display: grid;
+            grid-template-columns: 70% 15% 15%;
+            padding: 1.3em 1em;
+            color: white;
+          }
+        }
+    }
+}

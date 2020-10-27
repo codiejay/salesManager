@@ -1,0 +1,103 @@
+@import '../../Assets/CSS/variables';
+
+#addStockPage { 
+    #addStockBody { 
+      display: grid;
+      grid-template-columns: 20% 80%;
+        .addStockMain { 
+          padding: 8% 0px 0 3%;
+          height: 100vh;
+            #header {
+              width: 80%; 
+              position: relative;
+                .heading { 
+                  color: white;
+                  font-size: 1.3em;
+                  text-transform: capitalize;
+                  margin-bottom: 2em;
+                }
+                .postStatus {
+                  opacity: 0;
+                  transition: all 1s; 
+                  box-shadow: 0px 8px 30px 1px transparentize($color: $darkshade, $amount: 0.1);
+                  position: absolute;
+                  top: -80%;
+                  left: 40%;
+                  display: grid;
+                  grid-template-columns: 2fr 9fr;
+                  align-items: center;
+                  background-color: $darkshade;
+                  width: fit-content;
+                  padding: 15px 13px;
+                  border-radius: 9px;
+                    .success { 
+                      width: 40px;
+                      height: 40px;
+                      background: url('../../Assets/confetti.svg') no-repeat center/contain ;
+                    }
+                    .error { 
+                      width: 40px;
+                      height: 40px;
+                      background: url('../../Assets/warning.svg') no-repeat center/contain ;
+                    }
+                    p { 
+                      
+                      text-align: left;
+                      color: white;
+                      font-size: 1.3em;
+                      text-transform: capitalize;
+                    }
+                }
+            }
+            form { 
+                .formContent { 
+                  display: grid;
+                  grid-template-columns: 50% 25% 25%;
+                    div { 
+                      margin: 1em 0;
+                        label { 
+                          display: block;
+                          color: white;
+                          font-size: 1.3em;
+                        }
+                        input { 
+                          padding: 0.51em 9px;
+                          width: 70%;
+                          font-size: 1.1em;
+                          border: none;
+                          text-transform: inherit;
+                          border-radius: 200px;
+                        }
+
+                        input[type=number] { 
+                          -moz-appearance: textfield;
+                        }
+                    }
+                }
+
+                .fadedButton { 
+                  font-size: 1.1em;
+                  text-transform: capitalize;
+                  padding: 0.5em 1em;
+                  border: none;
+                  border-radius: 900px;
+                  font-weight: 900;
+                  margin-top: 2em;
+                  opacity: 0.3;
+                  cursor: not-allowed;
+                }
+                .regularButton { 
+                  font-size: 1.1em;
+                  text-transform: capitalize;
+                  padding: 0.5em 1em;
+                  border: none;
+                  border-radius: 900px;
+                  font-weight: 900;
+                  margin-top: 2em;
+                  opacity: 1;
+                  cursor: pointer;
+                }
+            }
+        }
+    }
+}

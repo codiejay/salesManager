@@ -1,0 +1,32 @@
+@import '../../Assets/CSS/_variables.scss';
+
+#login { 
+  padding-top: 25vh;
+  text-align: center;
+    .userIcon { 
+      width: 60px;
+      height: 60px;
+      background: url('../../Assets/userIcon.svg') no-repeat center/contain;
+      margin: 0 auto 3em auto;
+    }
+    input { 
+      padding: 10px 20px;
+      width: 28%;
+      border-radius: 200px;
+      border: none;
+      font-size: 1.4em;
+      text-transform: capitalize;
+      color: white;
+      background-color: $secondarycolor;
+        &::placeholder { 
+          color: white;
+          font-weight: bolder;
+        }
+        &:focus { 
+          outline: none;
+        }
+    }
+    #bigBttn {
+      margin: 1em auto;
+    }
+}

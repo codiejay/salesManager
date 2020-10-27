@@ -1,0 +1,22 @@
+@import '../../Assets/CSS/variables';
+
+#sideBar { 
+  background-color: $darkshade;
+  height: auto;
+  width: 100%;
+  padding: 20% 0px 0px 13px;
+    a { 
+      display: block;
+      text-decoration: none;
+      color: white;
+      font-size: 1.5em;
+      font-weight: 200;
+      background-color: $secondarycolor;
+      width: fit-content;
+      margin: 1em 0;
+      list-style: none;
+      border-radius: 902px;
+      padding: 7px 12px;
+      user-select: none;
+    }
+}

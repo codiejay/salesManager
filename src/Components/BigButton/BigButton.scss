@@ -1,0 +1,24 @@
+@import '../../Assets/CSS/variables';
+
+#bigBttn { 
+  background-color: $secondarycolor;
+  color: white;
+  font-size: 1.2em;
+  width: fit-content;
+  display: grid;
+  gap: 1em;
+  grid-template-columns: 1fr 9fr;
+  align-items: center;
+  padding: 10px 20px;
+  border-radius: 300px;
+  cursor: pointer;
+    button { 
+      background-color: $secondarycolor;
+      border: none;
+      color: white;
+      border-radius: 200px;
+      font-size: 0.6em;
+      cursor: pointer;
+      text-transform: capitalize;
+    }
+}

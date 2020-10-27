@@ -1,0 +1,17 @@
+@import './/.//Assets/CSS/_variables';
+
+body {
+  background-color: $basecolor;
+};
+
+* { 
+  font-family: $basefont;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+
+    &:focus { 
+      outline: none;
+    }
+}
+
