@@ -1,39 +1,105 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.scss';
-import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter, Switch, Route, Redirect, useParams } from 'react-router-dom';
 import Login from './Pages/Login/Login';
 import firebase from './Firebase';
 import Store from './Pages/Store/Store';
 import AddStock from './Pages/AddStock/AddStock';
 import Stocks from './Pages/Stocks/Stocks';
+import StockPage from './Pages/StockPage/StockPage';
+import AddStore from './Pages/AddStore/AddStore';
 
 const App = () => {
   
 
   let approvedUser = 'bolu';
+  let userName = firebase.auth().currentUser;
+  
+  //functions for stockPage
+  const redirectStockPageHandler = (event) => { 
+    setRedirectStockPage(event);
+  }
+
+  //fetch full Stocks here and return to addstock comp.
+  let stocksRef = firebase.firestore()
+  .collection('approved')
+  .doc(approvedUser)
+  .collection('stock')
+  .where('stockQuantity', '>' , 0)
+
+  let runningOutStockRef = firebase.firestore()
+    .collection('approved')
+    .doc(approvedUser)
+    .collection('stock')
+    .where('stockQuantity', '<=' , 3);
+
+  let outOfStockRef = firebase.firestore()
+    .collection('approved')
+    .doc(approvedUser)
+    .collection('stock')
+    .where('stockQuantity', '<=' , 0);
+
+  useEffect(() => { 
+    let newArr = [];
+    stocksRef.onSnapshot((res) => {
+      res.docs.forEach((item, index) => {
+        newArr.push(item.data());
+      });
+      setStocksList([...newArr]);
+      newArr = [];
+    })    
+  }, []);
+
+  useEffect(() => { 
+    let newArr = [];
+    runningOutStockRef.onSnapshot(results => {
+      results.docs.forEach(item => { 
+        newArr.push(item.data())
+      })
+
+      setRunningOut([...newArr]);
+      newArr = [];
+    })
+  }, [])
+
+  useEffect(() => { 
+    outOfStockRef.onSnapshot(result => {
+      let newArr = [];
+      result.docs.forEach(item => { 
+        newArr.push(item.data())
+      })
+      setoutOfStock([...newArr]);
+      newArr = [];
+    })
+  }, [])
 
 
+  //props call from addStock
   const PushItem = (item) => { 
     let dateClass = new Date();
-
+    setaddStockBttn('please wait');
     let fullDate = `${dateClass.getDate()} ${dateClass.getMonth()} ${dateClass.getFullYear()}`;
-
     firebase.firestore()
     .collection('approved')
     .doc(approvedUser)
     .collection('stock')
-    .doc()
+    .doc(item.stockName.toLowerCase())
     .set({ 
-      ...item, date: fullDate, id: `${dateClass.getTime()}`
+      ...item, 
+      date: fullDate, 
+      id: `${dateClass.getTime()}`,
+      adminInCharge: userName.displayName
     })
     .then(data => { 
+        setaddStockBttn('done');
         console.log('done')
         setaddedStock('Stock has been added successfully');
         setShowSucess(true);
         let success = setInterval(() => {
           setShowSucess(false);
+          setaddStockBttn('add to store');
           runThis()
-        }, 3000);
+        }, 1500);
 
         let runThis = () => { 
           clearInterval(success);
@@ -65,6 +131,7 @@ const App = () => {
     }
   })
 
+  //admin props
   let [loggedIn, setLoggedIn] = useState(false);
   let [userImg, setUserImg] = useState('');
   let [cashTotal, setcashTotal] = useState(0);
@@ -74,15 +141,27 @@ const App = () => {
     cashProfit: 28990,
   });
 
-  let [addedStock, setaddedStock] = useState('Stock has been added successfully');
 
+  //hooks for addStock component
+  let [addedStock, setaddedStock] = useState('Stock has been added successfully');
   let [ShowSucess, setShowSucess] = useState(false);
+  let [addStockBttn, setaddStockBttn] = useState('add to store');
+
+  //hooks for stocks comp
+  let [stocksList, setStocksList] = useState([]);
+  let [runningOut, setRunningOut ] = useState([]);
+  let [outOfStock, setoutOfStock] = useState([]);
+
+  //hooks for stockPage comp
+  let [individualStock, setindividualStock] = useState([]);
+  let [redirectStockPage, setRedirectStockPage] = useState(true);
+
   return (
     loggedIn 
     ?
       <BrowserRouter>
         <Route>
-          <Redirect to='/stocks' />
+          <Redirect to='/addstore' />
         </Route> 
         <Switch>
           <Route 
@@ -114,12 +193,14 @@ const App = () => {
                   PushItem={PushItem}
                   addedStock={addedStock}
                   ShowSucess={ShowSucess}
+                  addStockBttn={addStockBttn}
                 />
               )
             }}
           > 
           </Route>
           <Route 
+            exact
             path='/stocks'
             component={() => { 
               return ( 
@@ -127,10 +208,48 @@ const App = () => {
                   loggedIn={loggedIn}
                   signOut={signOutHandler}
                   userImg={userImg}
+                  approvedUser={approvedUser}
+                  stocksList={stocksList}
+                  runningOutStocks={runningOut}
+                  outOfStock={outOfStock}
                 />
               )
             }}
           > 
+
+          </Route>
+          <Route 
+            exact
+            path='/stocks/:id'
+            component={() => { 
+              return ( 
+                <StockPage 
+                  loggedIn={loggedIn}
+                  signOut={signOutHandler}
+                  userImg={userImg}
+                  approvedUser={approvedUser}
+                  redirectStockPage={redirectStockPage}
+                  redirectStockPageHandler={redirectStockPageHandler}
+                />
+              )
+            }}
+          > 
+
+          </Route>
+          <Route
+            exact
+            path='/addstore'
+            component={() => {
+              return ( 
+                <AddStore 
+                  loggedIn={loggedIn}
+                  signOut={signOutHandler}
+                  userImg={userImg}
+                  approvedUser={approvedUser}
+                />
+              )
+            }}
+          >
 
           </Route>
         </Switch>
@@ -150,20 +269,20 @@ const App = () => {
             }}
           >
           </Route>
-        </Switch>
-        <Switch> 
           <Route 
             exact
             path='/store'
             component={Store}
           >
           </Route>
-        </Switch>
-        <Switch> 
-          <Route 
-            exact
+          <Route
             path='/addstock'
             component={AddStock}
+          >
+          </Route>
+          <Route
+            path='/'
+            component={Stocks}
           >
           </Route>
         </Switch>

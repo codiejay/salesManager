@@ -45,16 +45,16 @@ const AddStock = (props) => {
         setnewStock({...newStock, stockName: `${e.target.value}`});
         break;
       case 'itemQuantity':
-        setnewStock({...newStock, stockQuantity: `${e.target.value}`});
+        setnewStock({...newStock, stockQuantity: parseInt(e.target.value)});
         break;
       case 'watchQuantity': 
-        setnewStock({...newStock, stockWatchQuantity: `${e.target.value}`});
+        setnewStock({...newStock, stockWatchQuantity: parseInt(e.target.value)});
         break;
       case 'salesPrice': 
-        setnewStock({...newStock, stockPrice: `${e.target.value}`});
+        setnewStock({...newStock, purchasePrice: parseInt(e.target.value)});
         break;
         case 'sellingPrice': 
-          setnewStock({...newStock, stockSelling: `${e.target.value}`});
+          setnewStock({...newStock, sellingPrice: parseInt(e.target.value)});
           break;
       // case 'pin': 
       // setnewStock({...newStock, userPin: `${e.target.value}`});
@@ -72,13 +72,14 @@ const AddStock = (props) => {
     stockName: '',
     stockQuantity: 0,
     stockWatchQuantity: 0,
-    stockSelling: 0,
-    stockPrice: 0,
+    sellingPrice: 0,
+    purchasePrice: 0,
+    lastUpdate: 0,
     // userPin: '',
   });
 
   let [stockAdded, setStockAdded] = useState(props.addedStock);
-
+  let [addToStockBttn, setaddToStockBttn] = useState('add to store');
   let [ShowSucess, setShowSucess] = useState(props.ShowSucess);
   return ( 
     props.loggedIn 
@@ -140,12 +141,12 @@ const AddStock = (props) => {
               </div>
 
               <div>
-                <label htmlFor='salesPrice'>sales price</label>
+                <label htmlFor='salesPrice'>purchase price</label>
                 <input 
                   onChange={InputChangeHandler} 
                   type="number"
                   id='salesPrice'
-                  placeholder='sales price'
+                  placeholder='purchase price'
                   maxLength='8'
                 />
               </div>
@@ -176,7 +177,7 @@ const AddStock = (props) => {
             <button 
               className={buttonState.buttonState}
             >
-              add to store
+              {props.addStockBttn}
             </button>
           </form>
         </div>

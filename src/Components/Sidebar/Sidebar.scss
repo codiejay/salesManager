@@ -9,8 +9,8 @@
       display: block;
       text-decoration: none;
       color: white;
-      font-size: 1.5em;
-      font-weight: 200;
+      font-size: 1.4em;
+      font-weight: 600;
       background-color: $secondarycolor;
       width: fit-content;
       margin: 1em 0;
@@ -18,5 +18,9 @@
       border-radius: 902px;
       padding: 7px 12px;
       user-select: none;
+    }
+    #currentBttn { 
+      background-color: white;
+      color: $darkshade;
     }
 }

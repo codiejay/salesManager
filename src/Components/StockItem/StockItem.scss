@@ -1,20 +1,16 @@
 @import '../../Assets/CSS/variables';
 
 .stockItem { 
+  display: block;
+  text-decoration: none;
+  cursor: pointer;
   color: white;
   width: 95%;
-  margin: 0 auto;
-    .top { 
-      display: grid;
-      grid-template-columns: 70% 15% 15%;
-      padding: 1.3em 1em;
-
-    }
+  margin: 1em auto 0 auto;
     .mainItem { 
       display: grid;
       grid-template-columns: 70% 15% 15%;
       background-color: $darkshade;
       padding: 1.3em 1em;
-      margin: 1.4em 0;
     }
 };

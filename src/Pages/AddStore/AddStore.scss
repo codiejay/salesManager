@@ -1,0 +1,76 @@
+@import '../../Assets/CSS/variables';
+
+#AddStorePage { 
+
+    .addStoreBody { 
+      display: grid;
+      grid-template-columns: 20% 80%;
+        .addStoreMain { 
+          padding-top: 6%;
+          padding-left: 3%;
+          height: 100vh;  
+            .heading { 
+              color: white;
+              font-size: 1.1em;
+              margin-bottom: 1em;
+            }
+            form { 
+                #storeData {
+                  margin-bottom: 2em;
+                    label { 
+                      display: block;
+                      color: white;
+                      font-size: 1.3em;
+                    }
+                    input { 
+                      margin-top: 0.4em;
+                      padding: 0.51em 9px;
+                      width: 40%;
+                      font-size: 1.1em;
+                      border: none;
+                      text-transform: inherit;
+                      border-radius: 200px;
+                    }
+
+                    input[type=number] { 
+                      -moz-appearance: textfield;
+                    }
+                }
+                .attendantsBox { 
+                  display: grid;
+                  grid-template-columns: 2fr 3fr;
+                  width: 60%;
+                  margin-bottom: 3em;
+                    #attendant { 
+                        label { 
+                          text-transform: capitalize;
+                          display: block;
+                          color: white;
+                          font-size: 1.3em;
+                        }
+                        input { 
+                          margin-top: 0.4em;
+                          padding: 0.51em 9px;
+                          width: 90%;
+                          font-size: 1.1em;
+                          border: none;
+                          text-transform: inherit;
+                          border-radius: 200px;
+                        }
+                    }
+                }
+
+                button { 
+                  padding: 0.4em 2em;
+                  font-size: 1.3em;
+                  border-radius: 9px;
+                  border: 1px solid $success;
+                  color: $success;
+                  text-transform: capitalize;
+                  background-color: transparent;
+                  cursor: pointer;
+                }
+            }
+        }
+    }
+}

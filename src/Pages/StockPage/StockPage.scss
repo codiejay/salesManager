@@ -1,0 +1,78 @@
+@import '../../Assets/CSS/variables';
+
+#stockPage { 
+  
+    .stockpageBody { 
+      display: grid;
+      grid-template-columns: 20% 80%; 
+        .stockPageMain { 
+          height: 100vh;
+          padding: 7% 0 0 4%;
+            #heading { 
+              display: grid;
+              grid-template-columns: 6fr 6fr;
+              color: white;
+              align-items: center;
+                div:nth-child(1) { 
+                  margin-bottom: 3em;
+                    h1 { 
+                      font-size: 3em;
+                    } 
+                    p { 
+                      font-size: 0.9em;
+                      color: whitesmoke;
+                      text-transform: capitalize;
+                      margin-bottom: 1em;
+                    }
+                }
+                .bin { 
+                  background: $error url('../../Assets/dustBin.svg') no-repeat center/50%;
+                  height: 45px;
+                  width: 45px;
+                  border-radius: 9px;
+                  cursor: pointer;
+                }
+            }
+
+            form { 
+                #inputs { 
+                  display: grid;
+                  grid-template-columns: 50% 25% 20%;
+                    div { 
+                      margin-bottom: 1em;
+                        label { 
+                          color: white;
+                          display: block;
+                          font-size: 1.1em;
+                        }
+                        input { 
+                          margin-bottom: 1em;
+                          padding: 0.51em 9px;
+                          width: 70%;
+                          font-size: 1.1em;
+                          border: none;
+                          text-transform: inherit;
+                          border-radius: 200px;
+                        }
+        
+                        input[type=number] { 
+                          -moz-appearance: textfield;
+                        }
+                    }
+                }
+
+                button { 
+                  padding: 0.4em 2em;
+                  font-size: 1.3em;
+                  border-radius: 9px;
+                  border: 1px solid $success;
+                  color: $success;
+                  text-transform: capitalize;
+                  background-color: transparent;
+                  cursor: pointer;
+                  margin-top: 3em;
+                }
+            }
+        }
+    }
+}
