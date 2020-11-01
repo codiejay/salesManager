@@ -8,17 +8,103 @@ import AddStock from './Pages/AddStock/AddStock';
 import Stocks from './Pages/Stocks/Stocks';
 import StockPage from './Pages/StockPage/StockPage';
 import AddStore from './Pages/AddStore/AddStore';
+import Manage from './Pages/Manage/Manage';
 
 const App = () => {
   
 
   let approvedUser = 'bolu';
   let userName = firebase.auth().currentUser;
+  let adminList = ['akpan', 'bolu', 'agbelemo'];
+
+  //Function for managePage
+
+  const deleteStore = (e) => {
+    firebase.firestore()
+      .collection('approved')
+      .doc(approvedUser)
+      .collection('store')
+      .doc(e)
+      .update({ 
+        show: false
+      })
+  }
+
+  useEffect(() => { 
+    let newArr = [];
+    firebase.firestore()
+      .collection('approved')
+      .doc(approvedUser)
+      .collection('store')
+      .where('show', '==', true)
+      .onSnapshot(data => { 
+        data.docs.forEach(item => { 
+          newArr.push(item.data());
+        })
+        setStoreList(newArr);
+        newArr=[];
+      })
+  }, [])
   
   //functions for stockPage
   const redirectStockPageHandler = (event) => { 
     setRedirectStockPage(event);
   }
+
+  //function for addStore page 
+  const makeNewStore = (store, attendant) =>{ 
+
+    if(store.length > 0 && attendant.pin.length > 4) {
+
+      let dateClass = new Date();
+      let fullDate = `${dateClass.getDate()} ${dateClass.getMonth()} ${dateClass.getFullYear()}`;
+      setButtonText('processing');
+      let storesRef = firebase.firestore()
+      .collection('approved')
+      .doc(approvedUser)
+      .collection('store')
+      .doc(store.toLowerCase())
+      .set({ 
+        storeName: store.toLowerCase(),
+        attendants: [ 
+          {name: attendant.name, pin: attendant.pin}
+        ],
+        createdBy: userName.displayName,
+        dateAdded: fullDate,
+        show: true,
+      })
+      .then((d) => { 
+        firebase.firestore()
+          .collection('approved')
+          .doc(approvedUser)
+          .collection('stock')
+          .get()
+          .then(d => { 
+            d.docs.forEach(item => { 
+              firebase.firestore()
+              .collection('approved')
+              .doc(approvedUser)
+              .collection('store')
+              .doc(store.toLowerCase())
+              .collection('stocks')
+              .doc(item.data().stockName)
+              .set({...item.data(), stockQuantity: 0})
+              .then(d => { 
+                console.log('fuckong legend')
+              })
+            })
+          })
+
+
+        setButtonText('done');
+        setTimeout(() => {
+          setButtonText('create store');
+        }, 1000);
+      })
+    }
+    
+  }
+
 
   //fetch full Stocks here and return to addstock comp.
   let stocksRef = firebase.firestore()
@@ -91,15 +177,33 @@ const App = () => {
       adminInCharge: userName.displayName
     })
     .then(data => { 
+        
+        //add the new stock to all stores
+        storeList.forEach(store => { 
+          firebase.firestore()
+            .collection('approved')
+            .doc(approvedUser)
+            .collection('store')
+            .doc(store.storeName)
+            .collection('stocks')
+            .doc(item.stockName.toLowerCase())
+            .set({ 
+              ...item, 
+              date: fullDate, 
+              id: `${dateClass.getTime()}`,
+              adminInCharge: userName.displayName,
+              stockQuantity: 0
+            })
+        })
+
         setaddStockBttn('done');
-        console.log('done')
         setaddedStock('Stock has been added successfully');
         setShowSucess(true);
         let success = setInterval(() => {
           setShowSucess(false);
           setaddStockBttn('add to store');
           runThis()
-        }, 1500);
+        }, 1000);
 
         let runThis = () => { 
           clearInterval(success);
@@ -114,15 +218,22 @@ const App = () => {
     firebase.auth().signOut()
     .then(() => { 
       return setLoggedIn(false);
-
     })
     .catch((error) => { 
       console.error(error)
     })
-  }
+  };
+
   //automatically log a user in
   firebase.auth().onAuthStateChanged(user => { 
     if(user) { 
+      if(
+        user.displayName.split(' ')[0] === 'akpan' ||
+        user.displayName.split(' ')[0] === 'bolu' ||
+        user.displayName.split(' ')[0] === 'agbelemo'
+      ) { 
+        setIsAdmin(true);
+      }
       setLoggedIn(true);
       setUserImg(user.photoURL);
     }
@@ -156,14 +267,23 @@ const App = () => {
   let [individualStock, setindividualStock] = useState([]);
   let [redirectStockPage, setRedirectStockPage] = useState(true);
 
+  //hooks for addStore comp
+  let [buttonText, setButtonText] = useState('create store')
+  
+  //hooks for manage comp
+  let [storeList, setStoreList] = useState([]);
+
+  //hooks to determine admin
+  let [displayName, setDisplayName] = useState('')
+  let [isAdmin, setIsAdmin] = useState(false);
   return (
     loggedIn 
     ?
       <BrowserRouter>
         <Route>
-          <Redirect to='/addstore' />
+          <Redirect to={isAdmin ? 'stocks/' : '/manage' } />
         </Route> 
-        <Switch>
+        <Switch>  
           <Route 
             path='/store'
             component={() => {
@@ -224,6 +344,7 @@ const App = () => {
             component={() => { 
               return ( 
                 <StockPage 
+                  storesList={storeList}
                   loggedIn={loggedIn}
                   signOut={signOutHandler}
                   userImg={userImg}
@@ -246,10 +367,32 @@ const App = () => {
                   signOut={signOutHandler}
                   userImg={userImg}
                   approvedUser={approvedUser}
+                  makeNewStore={makeNewStore}
+                  buttonText={buttonText}
                 />
               )
             }}
           >
+
+          </Route>
+
+          <Route
+            exact
+            path='/manage'
+            component={() => {
+              return (
+                <Manage 
+                  loggedIn={loggedIn}
+                  signOut={signOutHandler}
+                  userImg={userImg}
+                  approvedUser={approvedUser}
+                  storeList={storeList}
+                  deleteStore={deleteStore}
+                />
+              )
+            }}
+          >
+
 
           </Route>
         </Switch>

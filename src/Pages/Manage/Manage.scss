@@ -1,0 +1,65 @@
+@import '../../Assets/CSS/variables';
+
+.managePage { 
+    .managePageBody { 
+      display: grid;
+      grid-template-columns: 20% 80%;
+        .managePageMain { 
+          padding-top: 6%;
+          padding-left: 4%;
+          height: 100vh;
+            #storeList { 
+              display: grid;
+              width: 70%;
+              grid-template-columns: 1fr 1fr 1fr;
+              gap: 1em;
+              text-align: center;
+              align-items: center;
+                .Store { 
+                  position: relative;
+                  margin-bottom: 3em;
+                    &:hover .bin { 
+                      display: block;
+                    }
+                    a { 
+                      text-decoration: none;
+                        div { 
+                          background: white url('../../Assets/storeIcon.svg') no-repeat center/50%;
+                          border-radius: 900px;
+                          width: 120px;
+                          height: 120px;
+                          display: block;
+                          margin: 1em auto;
+                        }
+                        p { 
+                          text-decoration: none;
+                          display: block;
+                          font-size: 1.3em;
+                          color: white;
+                          font-weight: 900;
+                          text-transform: uppercase;
+                        }
+                    }
+                    .bin { 
+                      display: none;
+                      position: absolute;
+                      top: 3%;
+                      right: 4%;
+                      width: 40px;
+                      height: 40px;
+                      border-radius: 9px;
+                      background: $error url('../../Assets/dustBin.svg') no-repeat center/50%;cursor: pointer;
+                      transition: display 8s;
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+// background: $error url('../../Assets/dustBin.svg') no-repeat center/50%;
+// height: 45px;
+// width: 45px;
+// border-radius: 9px;
+// cursor: pointer;

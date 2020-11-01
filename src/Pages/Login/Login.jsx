@@ -33,7 +33,7 @@ const Login = (props) => {
             })
 
         }
-        else console.log(`${typeof data.data().secretPin} ${typeof pin}`)
+        else alert('fuck off')
       })
     }
   };

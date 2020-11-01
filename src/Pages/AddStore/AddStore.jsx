@@ -7,6 +7,7 @@ const AddStore = (props) => {
 
   const formSumitted = (e) => { 
     e.preventDefault();
+      props.makeNewStore(storeName, attendant);
   }
 
   const inputChangeHandler = (e) => { 
@@ -29,7 +30,8 @@ const AddStore = (props) => {
   let [attendant, setAttendant] = useState({ 
     name: '',
     pin: 0,
-  })
+  });
+  let [buttonText, setButtonText] = useState(props.buttonText)
   return ( 
     <div id='AddStorePage'> 
       <LoggedInHeader 
@@ -80,7 +82,8 @@ const AddStore = (props) => {
                     id='attendantPin'
                     type="number"
                     onChange={inputChangeHandler}
-                    placeholder='2938983'
+                    placeholder='29384'
+                    maxLength={5}
                   />
                 </div>
               </div>
@@ -88,7 +91,7 @@ const AddStore = (props) => {
               <button
                 onClick={formSumitted}
               >
-                create store
+                {buttonText}
               </button>
             </form>
         </div>

@@ -41,7 +41,21 @@ const StockPage = (props)  => {
         break;
     }
   }
-  
+
+  //updates store's stock
+  const updateStoreStock = (e) => { 
+    firebase.firestore()
+      .collection('approved')
+      .doc(props.approvedUser)
+      .collection('store')
+      .doc(e.target.id.toLowerCase())
+      .collection('stocks')
+      .doc(stock.stockName)
+      .update({ 
+        stockName: stock.stockName,
+        stockQuantity: e.target.value
+      })
+  }
   useEffect(() => { 
     let cleanUp = firebase.firestore()
     .collection('approved')
@@ -53,10 +67,32 @@ const StockPage = (props)  => {
       d.docs.forEach(item => {
         let arr = item.data()
         setStock(arr);
-        setStockId(stockId = item.id)
+        setStockId(stockId = item.id);
+
+        //at this time 5:35am, I give up
+      //   //setting the stock into each store
+      //   props.storesList.map((item, index) => { 
+      //   let newArr = []
+      //   setStoreCount(storeCount+=1)
+      //   firebase.firestore()
+      //     .collection('approved')
+      //     .doc(props.approvedUser)
+      //     .collection('store')
+      //     .doc(item.storeName)
+      //     .collection('stocks'
+      //     .doc(stockId)
+      //     .get()
+      //     .then(doc => {
+      //       newArr.push(doc.data())
+      //       // doIt(newArr)
+      //       setStoresStock([...storesStock, storesStock.push(doc.data())])
+      //     })
+      //     setStoresStock(storesStock.push(newArr))
+      // })
       })
     })
   }, [])
+
 
   const formSubmitted = (e) => { 
     e.preventDefault();
@@ -68,6 +104,20 @@ const StockPage = (props)  => {
       .doc(stockId)
       .update(stock)
       .then(d => { 
+        
+        props.storesList.forEach(item => {
+          firebase.firestore()
+            .collection('approved')
+            .doc(props.approvedUser)
+            .collection('store')
+            .doc(item.storeName)
+            .collection('stocks')
+            .doc('enya')
+            .update({ 
+              stockName: stock.stockName
+            })
+        })
+
         setUpdateButton('Update item');
       })
   }
@@ -84,16 +134,34 @@ const StockPage = (props)  => {
     .doc(stockId)
     .delete()
     .then((res) => { 
-      props.redirectStockPageHandler(false);
+      props.storesList.forEach(item => {
+        firebase.firestore()
+          .collection('approved')
+          .doc(props.approvedUser)
+          .collection('store')
+          .doc(item.storeName)
+          .collection('stocks')
+          .doc(stockId)
+          .delete()
+          .then(d => { 
+            console.log('deleted');
+          })
+        props.redirectStockPageHandler(false);
+      })
     });
+
+    deleteFromStores()
   }
 
+  const deleteFromStores = () => { 
+  }
 
   let [stock, setStock] = useState([]);
   let [stockId, setStockId] = useState('');
   let [updateButton, setUpdateButton] = useState('update item');
   let [shouldNotRedirect, setShouldNotRedirect] = useState(true);
-
+  let [storesStock, setStoresStock] = useState([]);
+  let [storeCount, setStoreCount] = useState(0)
 
   return ( 
     props.redirectStockPage ? 
@@ -177,6 +245,24 @@ const StockPage = (props)  => {
             </div>
             <button> {updateButton} </button>
           </form>
+
+          <div className="stores">
+            { 
+              props.storesList.map((item, index) => { 
+                return ( 
+                  <div key={index}>
+                    <h3> {item.storeName} </h3>
+                    <input 
+                      id={item.storeName}
+                      type='number' 
+                      placeholder= {`set stock quantity for ${item.storeName}`}
+                      onChange={updateStoreStock}
+                    />
+                  </div>
+                )
+              })
+            }
+          </div>
 
         </div>
       </div>

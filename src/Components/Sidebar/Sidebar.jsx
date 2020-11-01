@@ -11,7 +11,9 @@ const Sidebar = (props) => {
 
   let [currentBttn , setcurrentBttn] = useState(window.location.href.split('/')[3])
   return ( 
-    <div id='sideBar'> 
+    <div 
+      id='sideBar'
+    > 
         <Link 
           onClick={addCurrentBttn} 
           id={(currentBttn === 'addstock') ? 'currentBttn' : ''}
@@ -30,11 +32,11 @@ const Sidebar = (props) => {
         </Link>
         <Link 
           onClick={addCurrentBttn} 
-          to='/history'
-          id={(currentBttn === 'history') ? 'currentBttn' : ''}
-          data-name='history'
+          to='/manage'
+          id={(currentBttn === 'manage') ? 'currentBttn' : ''}
+          data-name='manage'
         >
-          History
+          Manage
         </Link>
         <Link 
           onClick={addCurrentBttn} 
