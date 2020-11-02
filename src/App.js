@@ -9,6 +9,7 @@ import Stocks from './Pages/Stocks/Stocks';
 import StockPage from './Pages/StockPage/StockPage';
 import AddStore from './Pages/AddStore/AddStore';
 import Manage from './Pages/Manage/Manage';
+import StorePage from './Pages/StorePage/StorePage';
 
 const App = () => {
   
@@ -17,16 +18,33 @@ const App = () => {
   let userName = firebase.auth().currentUser;
   let adminList = ['akpan', 'bolu', 'agbelemo'];
 
+  //Function to get stock for store 
+  // const getStocks = (e) => { 
+  //   let newArr = [];
+  //   firebase.firestore()
+  //     .collection('approved')
+  //     .doc(approvedUser)
+  //     .collection('store')
+  //     .doc(e)
+  //     .collection('stocks')
+  //     .onSnapshot(data => {
+  //       data.docs.forEach(item => {
+  //         newArr.push(item.data())
+  //       })
+  //       setStoreStock([...newArr]);
+  //       newArr = [];
+  //     })
+  // }
   //Function for managePage
-
   const deleteStore = (e) => {
     firebase.firestore()
       .collection('approved')
       .doc(approvedUser)
       .collection('store')
       .doc(e)
-      .update({ 
-        show: false
+      .delete()
+      .then(d => { 
+        console.log('deleted')
       })
   }
 
@@ -133,7 +151,7 @@ const App = () => {
       });
       setStocksList([...newArr]);
       newArr = [];
-    })    
+    }) 
   }, []);
 
   useEffect(() => { 
@@ -227,13 +245,6 @@ const App = () => {
   //automatically log a user in
   firebase.auth().onAuthStateChanged(user => { 
     if(user) { 
-      if(
-        user.displayName.split(' ')[0] === 'akpan' ||
-        user.displayName.split(' ')[0] === 'bolu' ||
-        user.displayName.split(' ')[0] === 'agbelemo'
-      ) { 
-        setIsAdmin(true);
-      }
       setLoggedIn(true);
       setUserImg(user.photoURL);
     }
@@ -273,18 +284,19 @@ const App = () => {
   //hooks for manage comp
   let [storeList, setStoreList] = useState([]);
 
-  //hooks to determine admin
-  let [displayName, setDisplayName] = useState('')
-  let [isAdmin, setIsAdmin] = useState(false);
+  //hooks for stores stocks page
+  const [StoreStock, setStoreStock] = useState([]);
+
   return (
     loggedIn 
     ?
       <BrowserRouter>
         <Route>
-          <Redirect to={isAdmin ? 'stocks/' : '/manage' } />
+          <Redirect to='/manage/pota' />
         </Route> 
         <Switch>  
           <Route 
+            exact
             path='/store'
             component={() => {
               return (
@@ -392,7 +404,21 @@ const App = () => {
               )
             }}
           >
-
+          </Route>
+          <Route
+            path='/manage/:id'
+            component={() => {
+              return ( 
+                <StorePage 
+                  StoreStock={StoreStock}
+                  loggedIn={loggedIn}
+                  signOut={signOutHandler}
+                  userImg={userImg}
+                  approvedUser={approvedUser}
+                />
+              )
+            }}
+          > 
 
           </Route>
         </Switch>

@@ -43,19 +43,32 @@ const StockPage = (props)  => {
   }
 
   //updates store's stock
-  const updateStoreStock = (e) => { 
-    firebase.firestore()
-      .collection('approved')
-      .doc(props.approvedUser)
-      .collection('store')
-      .doc(e.target.id.toLowerCase())
-      .collection('stocks')
-      .doc(stock.stockName)
-      .update({ 
-        stockName: stock.stockName,
-        stockQuantity: e.target.value
-      })
-  }
+  // const updateStoreStock = (e) => { 
+  //   setStockInStoreChange(e.target.value)
+  //   firebase.firestore()
+  //     .collection('approved')
+  //     .doc(props.approvedUser)
+  //     .collection('store')
+  //     .doc(e.target.id.toLowerCase())
+  //     .collection('stocks')
+  //     .doc(stock.stockName)
+  //     .update({
+  //       stockName: stock.stockName,
+  //       stockQuantity: parseInt(e.target.value)
+  //     })
+  //     .then(() => { 
+  //       firebase.firestore()
+  //       .collection('approved')
+  //       .doc(props.approvedUser)
+  //       .collection('stock')
+  //       .doc(stock.stockName.toLowerCase())
+  //       .update({ 
+  //         stockQuantity: stock.stockQuantity - parseInt(stockInStoreChange)
+  //       })
+  //     })
+  // }
+
+
   useEffect(() => { 
     let cleanUp = firebase.firestore()
     .collection('approved')
@@ -105,18 +118,18 @@ const StockPage = (props)  => {
       .update(stock)
       .then(d => { 
         
-        props.storesList.forEach(item => {
-          firebase.firestore()
-            .collection('approved')
-            .doc(props.approvedUser)
-            .collection('store')
-            .doc(item.storeName)
-            .collection('stocks')
-            .doc('enya')
-            .update({ 
-              stockName: stock.stockName
-            })
-        })
+        // props.storesList.forEach(item => {
+        //   firebase.firestore()
+        //     .collection('approved')
+        //     .doc(props.approvedUser)
+        //     .collection('store')
+        //     .doc(item.storeName)
+        //     .collection('stocks')
+        //     .doc('enya')
+        //     .update({ 
+        //       stockName: stock.stockName
+        //     })
+        // })
 
         setUpdateButton('Update item');
       })
@@ -149,20 +162,12 @@ const StockPage = (props)  => {
         props.redirectStockPageHandler(false);
       })
     });
-
-    deleteFromStores()
-  }
-
-  const deleteFromStores = () => { 
-  }
+  };
 
   let [stock, setStock] = useState([]);
   let [stockId, setStockId] = useState('');
   let [updateButton, setUpdateButton] = useState('update item');
   let [shouldNotRedirect, setShouldNotRedirect] = useState(true);
-  let [storesStock, setStoresStock] = useState([]);
-  let [storeCount, setStoreCount] = useState(0)
-
   return ( 
     props.redirectStockPage ? 
     <div id="stockPage">
@@ -189,7 +194,7 @@ const StockPage = (props)  => {
 
           <form onSubmit={formSubmitted} >
             <div id='inputs'>
-              <div>
+              {/* <div>
                 <label htmlFor='stockName'>Item Name</label>
                 <input 
                   onChange={handleInputChange}
@@ -197,7 +202,7 @@ const StockPage = (props)  => {
                   id='stockName'
                   placeholder={stock.stockName}
                 />
-              </div>
+              </div> */}
 
               <div>
                 <label htmlFor='stockQuantity'>Item Quantity</label>
@@ -242,28 +247,19 @@ const StockPage = (props)  => {
                 />
               </div>
 
+              <div>
+                <label htmlFor='stockPrice'>Purchase Store</label>
+                <input 
+                  onChange={handleInputChange}
+                  type='text'
+                  id='purchasePrice'
+                  placeholder={stock.purchaseStore}
+                />
+              </div>
+
             </div>
             <button> {updateButton} </button>
           </form>
-
-          <div className="stores">
-            { 
-              props.storesList.map((item, index) => { 
-                return ( 
-                  <div key={index}>
-                    <h3> {item.storeName} </h3>
-                    <input 
-                      id={item.storeName}
-                      type='number' 
-                      placeholder= {`set stock quantity for ${item.storeName}`}
-                      onChange={updateStoreStock}
-                    />
-                  </div>
-                )
-              })
-            }
-          </div>
-
         </div>
       </div>
     </div>

@@ -56,6 +56,11 @@ const AddStock = (props) => {
         case 'sellingPrice': 
           setnewStock({...newStock, sellingPrice: parseInt(e.target.value)});
           break;
+        case 'purchaseStore': 
+          setnewStock({ 
+            ...newStock,  
+            purchaseStore: e.target.value
+          })
       // case 'pin': 
       // setnewStock({...newStock, userPin: `${e.target.value}`});
       // break;
@@ -75,6 +80,7 @@ const AddStock = (props) => {
     sellingPrice: 0,
     purchasePrice: 0,
     lastUpdate: 0,
+    purchaseStore: '',
     // userPin: '',
   });
 
@@ -159,6 +165,16 @@ const AddStock = (props) => {
                   id='sellingPrice'
                   placeholder='selling price'
                   maxLength='8'
+                />
+              </div>
+
+              <div>
+                <label htmlFor='itemName'>purchase store</label>
+                <input
+                  onChange={InputChangeHandler} 
+                  type="text"
+                  id='purchaseStore'
+                  placeholder='emcee solutons'
                 />
               </div>
 

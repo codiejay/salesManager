@@ -1,0 +1,74 @@
+@import '../../Assets/CSS/variables';
+
+.StorePage { 
+    .storePageBody { 
+      display: grid;
+      grid-template-columns: 20% 80%;
+        .storePageMain { 
+          padding-top: 6%;
+          padding-left: 4%;
+          height: 100vh;
+            .header { 
+                h1 { 
+                  color: $darkshade;
+                  text-transform: uppercase;
+                  background-color: white;
+                  width: fit-content;
+                  padding: 2px 12px;
+                  text-align: center;
+                  margin-bottom: 1em;
+                  border-radius: 9px;
+                }
+                .options { 
+                  display: grid;
+                  grid-template-columns: 1fr 1fr;
+                  width: 40%;
+                  margin-bottom: 3em;
+                    p { 
+                      width: fit-content;
+                      padding: 5px 8px;
+                      user-select: none;
+                      cursor: pointer;
+                      background-color: white;
+                      color: $darkshade;
+                      border-radius: 900px;
+                      text-transform: uppercase;
+                      font-weight: 600;
+                    }
+                }
+            }
+        }
+        .allStocks { 
+            #storeStockItem { 
+              background-color: $darkshade;
+              margin-bottom: 1em;
+              width: 98%;
+              display: grid;
+              grid-template-columns: 70% 24% 5%;
+              padding: 10px 16px;
+                h3 { 
+                  color: white;
+                  font-size: 1.3em;
+                  text-transform: capitalize;
+                }
+                input { 
+                  width: fit-content;
+                  background-color: transparent;
+                  border: none;
+                  color: white;
+                  font-size: 1.3em;
+                    &::placeholder { 
+                      color: white;
+                    }
+                }
+                .done { 
+                  width: 40px;
+                  height: 40px;
+                  background: $success url('../../Assets/done.svg') no-repeat center/40%;
+                  border-radius: 9px;
+                  cursor: pointer;
+                }
+            }
+        }
+    }
+}
