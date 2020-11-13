@@ -118,18 +118,16 @@ const StockPage = (props)  => {
       .update(stock)
       .then(d => { 
         
-        // props.storesList.forEach(item => {
-        //   firebase.firestore()
-        //     .collection('approved')
-        //     .doc(props.approvedUser)
-        //     .collection('store')
-        //     .doc(item.storeName)
-        //     .collection('stocks')
-        //     .doc('enya')
-        //     .update({ 
-        //       stockName: stock.stockName
-        //     })
-        // })
+        props.storesList.forEach(item => {
+          firebase.firestore()
+            .collection('approved')
+            .doc(props.approvedUser)
+            .collection('store')
+            .doc(item.storeName)
+            .collection('stocks')
+            .doc(stockId)
+            .update(stock)
+        })
 
         setUpdateButton('Update item');
       })
@@ -252,7 +250,7 @@ const StockPage = (props)  => {
                 <input 
                   onChange={handleInputChange}
                   type='text'
-                  id='purchasePrice'
+                  id='purchaseStore'
                   placeholder={stock.purchaseStore}
                 />
               </div>

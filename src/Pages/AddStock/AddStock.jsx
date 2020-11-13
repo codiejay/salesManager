@@ -97,7 +97,7 @@ const AddStock = (props) => {
       />
       <div id='addStockBody'>
         <Sidebar />
-        <div className="addStockMain">
+        <div className='addStockMain'>
           <div id='header'>
             <p className='heading'>add new item to store</p>
             <div 
@@ -115,12 +115,12 @@ const AddStock = (props) => {
             </div>
           </div>
           <form onSubmit={formSubmitted}>
-            <div className="formContent">
+            <div className='formContent'>
               <div>
                 <label htmlFor='itemName'>item's name</label>
                 <input
                   onChange={InputChangeHandler} 
-                  type="text"
+                  type='text'
                   id='itemName'
                   placeholder='techno 2020'
                 />
@@ -130,7 +130,7 @@ const AddStock = (props) => {
                 <label htmlFor='itemQuantity'>item's quantity</label>
                 <input 
                   onChange={InputChangeHandler} 
-                  type="number"
+                  type='number'
                   id='itemQuantity'
                   placeholder='30'
                 />
@@ -139,7 +139,7 @@ const AddStock = (props) => {
               <div>
                 <label htmlFor='watchQuantity'>watch quantity</label>
                 <input 
-                  type="number"
+                  type='number'
                   onChange={InputChangeHandler} 
                   id='watchQuantity'
                   placeholder='4'
@@ -150,7 +150,7 @@ const AddStock = (props) => {
                 <label htmlFor='salesPrice'>purchase price</label>
                 <input 
                   onChange={InputChangeHandler} 
-                  type="number"
+                  type='number'
                   id='salesPrice'
                   placeholder='purchase price'
                   maxLength='8'
@@ -161,18 +161,17 @@ const AddStock = (props) => {
                 <label htmlFor='sellingPrice'>selling price</label>
                 <input 
                   onChange={InputChangeHandler} 
-                  type="number"
+                  type='number'
                   id='sellingPrice'
                   placeholder='selling price'
                   maxLength='8'
                 />
               </div>
-
               <div>
                 <label htmlFor='itemName'>purchase store</label>
                 <input
                   onChange={InputChangeHandler} 
-                  type="text"
+                  type='text'
                   id='purchaseStore'
                   placeholder='emcee solutons'
                 />
@@ -182,7 +181,7 @@ const AddStock = (props) => {
                 <label htmlFor='pin'>your pin </label>
                 <input 
                   onChange={InputChangeHandler} 
-                  type="number"
+                  type='number'
                   id='pin'
                   placeholder='90998777'
                   value={newStock.userPin}

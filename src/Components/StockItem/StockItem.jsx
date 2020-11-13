@@ -8,7 +8,7 @@ const StockItem = (props) => {
     <Link 
       id={props.itemId} 
       className='stockItem' 
-      to={`/stocks/${props.itemId}`}
+      to={`${props.location}${props.itemId}`}
     > 
       <div className="mainItem">
         <h3 id='itemName'> {props.itemName} </h3>

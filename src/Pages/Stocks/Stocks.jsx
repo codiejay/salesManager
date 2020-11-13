@@ -105,6 +105,7 @@ const Stocks = (props) => {
                 let date = item.date.split(' ').join('/');
                 return ( 
                 <StockItem 
+                  location='/stocks/'
                   lastUpdate={item.lastUpdate}
                   key={index}
                   itemId={item.id}
@@ -130,6 +131,7 @@ const Stocks = (props) => {
                 let date = item.date.split(' ').join('/');
                 return ( 
                   <StockItem 
+                    location='/stocks/'
                     lastUpdate={item.lastUpdate}
                     key={index}
                     itemId={item.id}
@@ -154,6 +156,7 @@ const Stocks = (props) => {
                 let date = item.date.split(' ').join('/');
                 return ( 
                   <StockItem 
+                    location='/stocks/'
                     lastUpdate={item.lastUpdate}
                     key={index}
                     itemId={item.id}

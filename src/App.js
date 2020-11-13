@@ -10,6 +10,7 @@ import StockPage from './Pages/StockPage/StockPage';
 import AddStore from './Pages/AddStore/AddStore';
 import Manage from './Pages/Manage/Manage';
 import StorePage from './Pages/StorePage/StorePage';
+import SoldStock from './Pages/SoldStock/SoldStock';
 
 const App = () => {
   
@@ -35,6 +36,11 @@ const App = () => {
   //       newArr = [];
   //     })
   // }
+
+  //set current store. this is coming from storePage
+  const setCurrentStore = (e) => {
+    setCurrentStoreName(e)
+  }
   //Function for managePage
   const deleteStore = (e) => {
     firebase.firestore()
@@ -105,7 +111,7 @@ const App = () => {
               .collection('store')
               .doc(store.toLowerCase())
               .collection('stocks')
-              .doc(item.data().stockName)
+              .doc(item.data().stockName.toLowerCase())
               .set({...item.data(), stockQuantity: 0})
               .then(d => { 
                 console.log('fuckong legend')
@@ -231,6 +237,9 @@ const App = () => {
       setaddedStock('There was an error, try again.')
     })
   }
+
+  //set the current storeName
+  let [currentStoreName, setCurrentStoreName] = useState('')
   //function used to logout user.
   const signOutHandler = (event) => { 
     firebase.auth().signOut()
@@ -292,7 +301,7 @@ const App = () => {
     ?
       <BrowserRouter>
         <Route>
-          <Redirect to='/manage/pota' />
+          <Redirect to='/stocks' />
         </Route> 
         <Switch>  
           <Route 
@@ -406,11 +415,29 @@ const App = () => {
           >
           </Route>
           <Route
+            exact
             path='/manage/:id'
             component={() => {
               return ( 
                 <StorePage 
+                  setCurrentStore={setCurrentStore}
                   StoreStock={StoreStock}
+                  loggedIn={loggedIn}
+                  signOut={signOutHandler}
+                  userImg={userImg}
+                  approvedUser={approvedUser}
+                />
+              )
+            }}
+          > 
+
+          </Route>
+          <Route
+            path='/manage/:id/:id'
+            component={() => {
+              return ( 
+                <SoldStock 
+                  storeName={currentStoreName}
                   loggedIn={loggedIn}
                   signOut={signOutHandler}
                   userImg={userImg}

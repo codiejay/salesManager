@@ -1,0 +1,110 @@
+@import '../../Assets/CSS/variables';
+
+#soldstockpage { 
+  user-select: none;
+
+    .soldstockMain { 
+      padding-bottom: 2em;
+      padding-top: 5%;
+      padding-left: 2%;
+      display: grid;
+      grid-template-columns: 60% 40%;
+        .details{ 
+          h3 { 
+            font-size: 1.5em;
+            background-color: white;
+            width: fit-content;
+            padding: 0.1em 0.6em;
+            border-radius: 100px;
+          }
+            .itemDetails { 
+              .itemDetailsHeader { 
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                width: 50%;
+                gap: 0.4em;
+                align-items: center;
+                  h3 { 
+                    font-size: 1.5em;
+                    background-color: white;
+                    width: fit-content;
+                    padding: 0.1em 0.6em;
+                    border-radius: 100px;
+                  }
+                  .del { 
+                    background: url('../../Assets/dustBin.svg') no-repeat center/40% $error;
+                    border-radius: 900px;
+                    width: 53px;
+                    height: 53px;
+                    cursor: pointer;
+                  }
+              }
+              .detailItems { 
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 1.3em;
+                  .inputItems { 
+                    margin-bottom: 0em;
+                    margin-top: 2em;
+                      label { 
+                        color: white;
+                        font-size: 1.1em;
+                        display: block;
+                        text-transform: capitalize;
+                      }
+                      input { 
+                        width: fit-content;
+                        padding: 10px 20px; 
+                        border-radius: 200px;
+                        border: none;
+                        font-size: 1em;
+                        color: white;
+                        background-color: $secondarycolor;
+                          &:focus { 
+                            outline: none;
+                          }
+                      }
+                      input[data-fill='false'] { 
+                        cursor: not-allowed;
+                      }
+                  }
+              }
+              #detailItems {
+                display: grid;
+                gap: 0 2em;
+                grid-template-columns: 40% 60%;
+                  .inputItems { 
+                    margin-bottom: 1em;
+                    margin-top: 2em;
+                      label { 
+                        color: white;
+                        font-size: 1.1em;
+                        display: block;
+                        text-transform: capitalize;
+                      }
+                      input { 
+                        width: 70%;
+                        padding: 10px 20px; 
+                        border-radius: 200px;
+                        border: none;
+                        font-size: 1em;
+                        color: white;
+                        background-color: $secondarycolor;
+                          &:focus { 
+                            outline: none;
+                          }
+                      }
+                      input[data-fill='false'] { 
+                        cursor: not-allowed;
+                      }
+                  }
+              }
+
+            }
+        }
+        .printWindow { 
+          border-left: 1px solid rgb(255, 255, 255);
+        }
+
+    }
+}

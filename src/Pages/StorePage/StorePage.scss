@@ -21,8 +21,8 @@
                 }
                 .options { 
                   display: grid;
-                  grid-template-columns: 1fr 1fr;
-                  width: 40%;
+                  grid-template-columns: 1fr 1fr 1fr;
+                  width: 60%;
                   margin-bottom: 3em;
                     p { 
                       width: fit-content;
@@ -35,6 +35,18 @@
                       text-transform: uppercase;
                       font-weight: 600;
                     }
+                }
+            }
+            .sales { 
+              
+                .top { 
+                  width: 95%;
+                  display: grid;
+                  grid-template-columns: 70% 15% 15%;
+                  color: white;
+                }
+                a { 
+                  margin: 1em 0 ;
                 }
             }
         }
