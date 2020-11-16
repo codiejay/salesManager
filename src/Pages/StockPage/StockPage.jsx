@@ -118,16 +118,16 @@ const StockPage = (props)  => {
       .update(stock)
       .then(d => { 
         
-        props.storesList.forEach(item => {
-          firebase.firestore()
-            .collection('approved')
-            .doc(props.approvedUser)
-            .collection('store')
-            .doc(item.storeName)
-            .collection('stocks')
-            .doc(stockId)
-            .update(stock)
-        })
+        // props.storesList.forEach(item => {
+        //   firebase.firestore()
+        //     .collection('approved')
+        //     .doc(props.approvedUser)
+        //     .collection('store')
+        //     .doc(item.storeName)
+        //     .collection('stocks')
+        //     .doc(stockId)
+        //     .update(stock)
+        // })
 
         setUpdateButton('Update item');
       })

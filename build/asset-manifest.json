@@ -1,28 +1,29 @@
 {
   "files": {
-    "main.css": "/static/css/main.a7ce2ce0.chunk.css",
-    "main.js": "/static/js/main.3367b224.chunk.js",
-    "main.js.map": "/static/js/main.3367b224.chunk.js.map",
+    "main.css": "/static/css/main.4c46a035.chunk.css",
+    "main.js": "/static/js/main.180b527d.chunk.js",
+    "main.js.map": "/static/js/main.180b527d.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.ae208da2.js",
     "runtime-main.js.map": "/static/js/runtime-main.ae208da2.js.map",
-    "static/js/2.b43da158.chunk.js": "/static/js/2.b43da158.chunk.js",
-    "static/js/2.b43da158.chunk.js.map": "/static/js/2.b43da158.chunk.js.map",
+    "static/js/2.e580e181.chunk.js": "/static/js/2.e580e181.chunk.js",
+    "static/js/2.e580e181.chunk.js.map": "/static/js/2.e580e181.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.7f9f330efb8829c0569e73b77c1f6f95.js": "/precache-manifest.7f9f330efb8829c0569e73b77c1f6f95.js",
+    "precache-manifest.6c617271ffda3721b052a692299ac015.js": "/precache-manifest.6c617271ffda3721b052a692299ac015.js",
     "service-worker.js": "/service-worker.js",
-    "static/css/main.a7ce2ce0.chunk.css.map": "/static/css/main.a7ce2ce0.chunk.css.map",
-    "static/js/2.b43da158.chunk.js.LICENSE.txt": "/static/js/2.b43da158.chunk.js.LICENSE.txt",
+    "static/css/main.4c46a035.chunk.css.map": "/static/css/main.4c46a035.chunk.css.map",
+    "static/js/2.e580e181.chunk.js.LICENSE.txt": "/static/js/2.e580e181.chunk.js.LICENSE.txt",
     "static/media/AddStock.scss": "/static/media/warning.2f4af876.svg",
     "static/media/StorePage.scss": "/static/media/done.a48e18cc.svg",
-    "static/media/Manage.scss": "/static/media/storeIcon.e8a7f8b7.svg",
+    "static/media/SoldStock.scss": "/static/media/dustBin.7f85bba7.svg",
     "static/media/googleIcon.svg": "/static/media/googleIcon.20608d5e.svg",
     "static/media/LoggedInHeader.scss": "/static/media/homeIcon.468699d7.svg",
+    "static/media/Manage.scss": "/static/media/storeIcon.e8a7f8b7.svg",
     "static/media/userIcon.svg": "/static/media/userIcon.6b4c7eba.svg"
   },
   "entrypoints": [
     "static/js/runtime-main.ae208da2.js",
-    "static/js/2.b43da158.chunk.js",
-    "static/css/main.a7ce2ce0.chunk.css",
-    "static/js/main.3367b224.chunk.js"
+    "static/js/2.e580e181.chunk.js",
+    "static/css/main.4c46a035.chunk.css",
+    "static/js/main.180b527d.chunk.js"
   ]
 }
