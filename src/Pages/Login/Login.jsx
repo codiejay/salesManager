@@ -33,7 +33,7 @@ const Login = (props) => {
             })
 
         }
-        else alert('fuck off')
+        else alert('wrong, password')
       })
     }
   };
