@@ -118,16 +118,19 @@ const StockPage = (props)  => {
       .update(stock)
       .then(d => { 
         
-        // props.storesList.forEach(item => {
-        //   firebase.firestore()
-        //     .collection('approved')
-        //     .doc(props.approvedUser)
-        //     .collection('store')
-        //     .doc(item.storeName)
-        //     .collection('stocks')
-        //     .doc(stockId)
-        //     .update(stock)
-        // })
+        props.storesList.forEach(item => {
+          firebase.firestore()
+            .collection('approved')
+            .doc(props.approvedUser)
+            .collection('store')
+            .doc(item.storeName)
+            .collection('stocks')
+            .doc(stockId)
+            .update({
+              sellingPrice: stock.sellingPrice,
+              purchaseStore: stock.purchasePrice
+            })
+        })
 
         setUpdateButton('Update item');
       })
@@ -184,10 +187,16 @@ const StockPage = (props)  => {
               <p>date added: { stock.date ?  stock.date.split(' ').join('/') : ''}</p>
 
             </div>
-            <div 
+            { 
+              props.admin
+              ? 
+              <div 
               onClick={deleteItemHandler}
               className="bin"
             ></div>
+            : 
+            ''
+            }
           </div>
 
           <form onSubmit={formSubmitted} >
@@ -256,7 +265,16 @@ const StockPage = (props)  => {
               </div>
 
             </div>
-            <button> {updateButton} </button>
+            { 
+              props.admin 
+              ? 
+              <button
+            > 
+              {updateButton} 
+            </button>
+            : 
+            ''
+            }
           </form>
         </div>
       </div>

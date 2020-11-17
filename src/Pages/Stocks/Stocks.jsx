@@ -1,15 +1,22 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
   Redirect,
   Link,
 } from 'react-router-dom';
 import LoggedInHeader from '../../Components/LoggedInHeader/LoggedInHeader';
 import Sidebar from '../../Components/Sidebar/Sidebar';
-import './Stocks.scss'
 import StockItem from '../../Components/StockItem/StockItem';
-import { useState } from 'react';
+import firebase from '../../Firebase';
+import './Stocks.scss'
 
 const Stocks = (props) => { 
+
+  let approvedUser = 'bolu';
+
+  let stocksRef = firebase.firestore()
+  .collection('approved')
+  .doc(approvedUser)
+  .collection('stock')
 
   useEffect(() => {
     setStockAppear(1);
@@ -21,23 +28,77 @@ const Stocks = (props) => {
     switch(elem) { 
       case 'currentStocks': 
         setcurrentView('current');
-        setStockAppear(props.stocksList.length);
+        setStockAppear(stockList.length);
+        break;
 
-        break;
       case 'runningOut': 
+        getRunningOut();
         setcurrentView('runningout');
-        setStockAppear(props.runningOutStocks.length);
+        setStockAppear(runningOutStocks.length);
         break;
+
       case 'outofstock':
+        getoutOfStock();
         setcurrentView('outofstock');
-        setStockAppear(props.outOfStock.length);
+        setStockAppear(outOfStock.length);
         break;
     }
   }
+    
+    useEffect(() => { 
+      let stockArr = [];
+      stocksRef
+      .where('stockQuantity', '>' , 0)
+        .onSnapshot(res => { 
+          res.docs.forEach(item => {
+            stockArr.push(item.data())
+          })
+          setStockList([...stockArr]);
+          stockArr = [];
+        })
+    } ,[]);
+
+    const getRunningOut = () => {
+      let runningOutArr = []
+      stocksRef
+      .get()
+      .then(res => {
+        res.docs.forEach(item => { 
+          let watchQty = item.data().stockWatchQuantity;
+          let stockQuantity = item.data().stockQuantity;
+          if(watchQty === stockQuantity) { 
+            runningOutArr.push(item.data());
+          };
+        })
+        setRunningOutStocks([...runningOutArr]);
+        runningOutArr = [];
+      })
+    }
+
+    const getoutOfStock = () => {
+      let outOfStockArr = []
+      let stocksRef = firebase.firestore()
+      .collection('approved')
+      .doc(approvedUser)
+      .collection('stock')
+      .where('stockQuantity', '==', 0)
+      .get()
+      .then(res => {
+        res.docs.forEach(item => { 
+          outOfStockArr.push(item.data())
+        })
+        setOutOfStock([...outOfStockArr]);
+        outOfStockArr = [];
+      })
+    }
 
     
   let [currentView, setcurrentView] = useState('current');
-  let [stockAppear, setStockAppear] = useState(1)
+  let [stockAppear, setStockAppear] = useState(1);
+  let [stockList, setStockList] = useState([]);
+  let [runningOutStocks, setRunningOutStocks] = useState([]);
+  let [outOfStock, setOutOfStock] = useState([]);
+  
   return ( 
     props.loggedIn 
     ? 
@@ -101,7 +162,7 @@ const Stocks = (props) => {
           >
             { 
               /* for current stocks */
-              props.stocksList.map((item, index) => {
+              stockList.map((item, index) => {
                 let date = item.date.split(' ').join('/');
                 return ( 
                 <StockItem 
@@ -127,7 +188,7 @@ const Stocks = (props) => {
             }}
           >
             {
-              props.runningOutStocks.map((item, index) => {
+              runningOutStocks.map((item, index) => {
                 let date = item.date.split(' ').join('/');
                 return ( 
                   <StockItem 
@@ -152,7 +213,7 @@ const Stocks = (props) => {
             }}
           >
             { 
-              props.outOfStock.map((item, index) => { 
+              outOfStock.map((item, index) => { 
                 let date = item.date.split(' ').join('/');
                 return ( 
                   <StockItem 

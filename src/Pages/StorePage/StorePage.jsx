@@ -50,7 +50,7 @@ const StorePage = (props) => {
           storeRef.get()
             .then(d => {
               let mainStockQuantity = d.data().stockQuantity;
-              if(mainStockQuantity > parseInt(newValue)) { 
+              if(mainStockQuantity >= parseInt(newValue)) { 
                 storeStockRef.update({ 
                   stockQuantity: newValue
                 })
@@ -70,7 +70,14 @@ const StorePage = (props) => {
                 storeStockRef.update({ 
                   stockQuantity: newValue,
                 })
-
+              }
+              else { 
+                storeRef.update({ 
+                  stockQuantity: doc.data().stockQuantity + parseInt(newValue + stockCurrentQuantity )
+                });
+                storeStockRef.update({ 
+                  stockQuantity: newValue,
+                })
               }
             })
         }
@@ -125,7 +132,7 @@ const StorePage = (props) => {
         .collection('sales')
         .onSnapshot(res => { 
           res.forEach((item) => {
-            profit += item.data().sellingPrice - item.data().purchasePrice;
+            profit += item.data().totalAmount
             salesArr.push(item.data());
           })
           setProfit(`₦${profit.toLocaleString()}`);
@@ -189,14 +196,20 @@ const StorePage = (props) => {
         <div className="storePageMain">
           <div className="header">
             <h1>{id}</h1>
-            <h3 style={{ 
-              color: 'white',
-              fontSize: '1.em',
-              marginBottom: '2em'
-            }}
-            >
-              Today's Profit: {profit}
-            </h3>
+            { 
+              props.admin 
+              ? 
+              <h3 style={{ 
+                color: 'white',
+                fontSize: '1.em',
+                marginBottom: '2em'
+              }}
+              >
+                Today's Profit: {profit}
+              </h3>
+              : 
+              ''
+            }
             <div className="options">
               <p 
                 id='stocks'

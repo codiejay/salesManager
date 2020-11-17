@@ -17,7 +17,10 @@ const Store = (props) => {
       />
       <div id='storeBody'>
         <Sidebar />
-        <div className="storeMain">
+        { 
+          props.admin 
+          ? 
+          <div className="storeMain">
           <div id='cashStatus'>
             <h3>{props.cashTotal}</h3>
             <p>Today's sales in cash</p>
@@ -33,6 +36,9 @@ const Store = (props) => {
             <p>Expected Profit</p>
           </div>
         </div>
+        : 
+        ''
+        }
       </div>
     </div>
     : 

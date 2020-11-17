@@ -129,61 +129,6 @@ const App = () => {
     
   }
 
-
-  //fetch full Stocks here and return to addstock comp.
-  let stocksRef = firebase.firestore()
-  .collection('approved')
-  .doc(approvedUser)
-  .collection('stock')
-  .where('stockQuantity', '>' , 0)
-
-  let runningOutStockRef = firebase.firestore()
-    .collection('approved')
-    .doc(approvedUser)
-    .collection('stock')
-    .where('stockQuantity', '<=' , 3);
-
-  let outOfStockRef = firebase.firestore()
-    .collection('approved')
-    .doc(approvedUser)
-    .collection('stock')
-    .where('stockQuantity', '<=' , 0);
-
-  useEffect(() => { 
-    let newArr = [];
-    stocksRef.onSnapshot((res) => {
-      res.docs.forEach((item, index) => {
-        newArr.push(item.data());
-      });
-      setStocksList([...newArr]);
-      newArr = [];
-    }) 
-  }, []);
-
-  useEffect(() => { 
-    let newArr = [];
-    runningOutStockRef.onSnapshot(results => {
-      results.docs.forEach(item => { 
-        newArr.push(item.data())
-      })
-
-      setRunningOut([...newArr]);
-      newArr = [];
-    })
-  }, [])
-
-  useEffect(() => { 
-    outOfStockRef.onSnapshot(result => {
-      let newArr = [];
-      result.docs.forEach(item => { 
-        newArr.push(item.data())
-      })
-      setoutOfStock([...newArr]);
-      newArr = [];
-    })
-  }, [])
-
-
   //props call from addStock
   const PushItem = (item) => { 
     let dateClass = new Date();
@@ -254,6 +199,18 @@ const App = () => {
   //automatically log a user in
   firebase.auth().onAuthStateChanged(user => { 
     if(user) { 
+      let userName = firebase.auth().currentUser.displayName;
+      userName.toLowerCase().split(' ').forEach(name => { 
+        if(
+          name === 'akpan' ||
+          name === 'james' ||
+          name === 'samuel' ||
+          name === 'boluwatife'
+        ) { 
+          setIsAdmin(true);
+        }
+      })
+      console.log(userName)
       setLoggedIn(true);
       setUserImg(user.photoURL);
     }
@@ -267,9 +224,9 @@ const App = () => {
   let [userImg, setUserImg] = useState('');
   let [cashTotal, setcashTotal] = useState(0);
   let [totals, setTotlas] = useState({ 
-    cashTotal: 12000,
-    cashReturn: 89503,
-    cashProfit: 28990,
+    // cashTotal: 12000,
+    // cashReturn: 89503,
+    // cashProfit: 28990,
   });
 
 
@@ -277,11 +234,6 @@ const App = () => {
   let [addedStock, setaddedStock] = useState('Stock has been added successfully');
   let [ShowSucess, setShowSucess] = useState(false);
   let [addStockBttn, setaddStockBttn] = useState('add to store');
-
-  //hooks for stocks comp
-  let [stocksList, setStocksList] = useState([]);
-  let [runningOut, setRunningOut ] = useState([]);
-  let [outOfStock, setoutOfStock] = useState([]);
 
   //hooks for stockPage comp
   let [individualStock, setindividualStock] = useState([]);
@@ -296,12 +248,14 @@ const App = () => {
   //hooks for stores stocks page
   const [StoreStock, setStoreStock] = useState([]);
 
+  //admins 
+  let [isadmin, setIsAdmin] = useState(false);
   return (
     loggedIn 
     ?
       <BrowserRouter>
         <Route>
-          <Redirect to='/stocks' />
+          <Redirect to='/store' />
         </Route> 
         <Switch>  
           <Route 
@@ -310,6 +264,7 @@ const App = () => {
             component={() => {
               return (
               <Store 
+                admin={isadmin}
                 loggedIn={loggedIn}
                 userImg={userImg}
                 cashTotal={cashTotal}
@@ -350,9 +305,6 @@ const App = () => {
                   signOut={signOutHandler}
                   userImg={userImg}
                   approvedUser={approvedUser}
-                  stocksList={stocksList}
-                  runningOutStocks={runningOut}
-                  outOfStock={outOfStock}
                 />
               )
             }}
@@ -365,6 +317,7 @@ const App = () => {
             component={() => { 
               return ( 
                 <StockPage 
+                  admin={isadmin}
                   storesList={storeList}
                   loggedIn={loggedIn}
                   signOut={signOutHandler}
@@ -420,6 +373,7 @@ const App = () => {
             component={() => {
               return ( 
                 <StorePage 
+                  admin={isadmin}
                   setCurrentStore={setCurrentStore}
                   StoreStock={StoreStock}
                   loggedIn={loggedIn}

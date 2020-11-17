@@ -20,9 +20,11 @@
                   border-radius: 9px;
                 }
                 .options { 
+                  justify-content: left;
                   display: grid;
                   grid-template-columns: 1fr 1fr 1fr;
                   width: 60%;
+                  gap: 0em;
                   margin-bottom: 3em;
                     p { 
                       width: fit-content;
@@ -34,6 +36,7 @@
                       border-radius: 900px;
                       text-transform: uppercase;
                       font-weight: 600;
+                      margin: 0 auto;
                     }
                 }
             }
