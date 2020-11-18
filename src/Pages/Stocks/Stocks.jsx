@@ -32,13 +32,11 @@ const Stocks = (props) => {
         break;
 
       case 'runningOut': 
-        getRunningOut();
         setcurrentView('runningout');
         setStockAppear(runningOutStocks.length);
         break;
 
       case 'outofstock':
-        getoutOfStock();
         setcurrentView('outofstock');
         setStockAppear(outOfStock.length);
         break;
@@ -49,7 +47,8 @@ const Stocks = (props) => {
       let stockArr = [];
       stocksRef
       .where('stockQuantity', '>' , 0)
-        .onSnapshot(res => { 
+        .get()
+        .then(res => { 
           res.docs.forEach(item => {
             stockArr.push(item.data())
           })
@@ -58,7 +57,7 @@ const Stocks = (props) => {
         })
     } ,[]);
 
-    const getRunningOut = () => {
+    useEffect(() => {
       let runningOutArr = []
       stocksRef
       .get()
@@ -73,9 +72,9 @@ const Stocks = (props) => {
         setRunningOutStocks([...runningOutArr]);
         runningOutArr = [];
       })
-    }
+    }, [])
 
-    const getoutOfStock = () => {
+    useEffect(() => {
       let outOfStockArr = []
       let stocksRef = firebase.firestore()
       .collection('approved')
@@ -90,7 +89,7 @@ const Stocks = (props) => {
         setOutOfStock([...outOfStockArr]);
         outOfStockArr = [];
       })
-    }
+    }, [])
 
     
   let [currentView, setcurrentView] = useState('current');

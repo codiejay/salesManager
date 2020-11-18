@@ -19,23 +19,6 @@ const App = () => {
   let userName = firebase.auth().currentUser;
   let adminList = ['akpan', 'bolu', 'agbelemo'];
 
-  //Function to get stock for store 
-  // const getStocks = (e) => { 
-  //   let newArr = [];
-  //   firebase.firestore()
-  //     .collection('approved')
-  //     .doc(approvedUser)
-  //     .collection('store')
-  //     .doc(e)
-  //     .collection('stocks')
-  //     .onSnapshot(data => {
-  //       data.docs.forEach(item => {
-  //         newArr.push(item.data())
-  //       })
-  //       setStoreStock([...newArr]);
-  //       newArr = [];
-  //     })
-  // }
 
   //set current store. this is coming from storePage
   const setCurrentStore = (e) => {
@@ -50,7 +33,6 @@ const App = () => {
       .doc(e)
       .delete()
       .then(d => { 
-        console.log('deleted')
       })
   }
 
@@ -61,7 +43,8 @@ const App = () => {
       .doc(approvedUser)
       .collection('store')
       .where('show', '==', true)
-      .onSnapshot(data => { 
+      .get()
+      .then(data => { 
         data.docs.forEach(item => { 
           newArr.push(item.data());
         })
@@ -114,7 +97,6 @@ const App = () => {
               .doc(item.data().stockName.toLowerCase())
               .set({...item.data(), stockQuantity: 0})
               .then(d => { 
-                console.log('fuckong legend')
               })
             })
           })
@@ -210,7 +192,6 @@ const App = () => {
           setIsAdmin(true);
         }
       })
-      console.log(userName)
       setLoggedIn(true);
       setUserImg(user.photoURL);
     }

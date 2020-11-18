@@ -22,7 +22,7 @@
                 .options { 
                   justify-content: left;
                   display: grid;
-                  grid-template-columns: 1fr 1fr 1fr;
+                  grid-template-columns: 1fr 1fr 1fr 1fr;
                   width: 60%;
                   gap: 0em;
                   margin-bottom: 3em;
@@ -51,6 +51,38 @@
                 a { 
                   margin: 1em 0 ;
                 }
+            }
+            .overview { 
+                form { 
+                  width: fit-content;
+                  display: grid;
+                  grid-template-columns: 4fr 1fr;
+                  gap: 1em;
+                    input { 
+                      font-size: 16px;
+                      width: fit-content;
+                      padding: 0.5em 0.2em;
+                      border: none;
+                      border-radius: 900px;
+                    }
+                    button { 
+                      width: 50px;
+                      height: 50px;
+                      margin: 0 auto;
+                      background: white url('../../Assets/search.svg') no-repeat center/30%;
+                      border: none;
+                      border-radius: 900px;
+                      cursor: pointer;
+                    }
+                }
+                .top { 
+                  width: 95%;
+                  display: grid;
+                  grid-template-columns: 70% 15% 15%;
+                  color: white;
+                  margin-top: 2em;
+                }
+                
             }
         }
         .allStocks { 

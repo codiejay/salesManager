@@ -93,11 +93,19 @@ const StorePage = (props) => {
       case 'stocks': 
         setView('allStocks');
         break;
+
       case 'sales':
         setView('sales');
         break;
+
       case 'expenses': 
-        setView('expenses')
+        setView('expenses');
+        break;
+
+      case 'overview':
+        setView('overview');
+        break;
+
     }
   }
 
@@ -108,19 +116,22 @@ const StorePage = (props) => {
     let stocksArr = [];
     let expensesArr = [];
     let profit = 0;
+    
     firebase.firestore()
       .collection('approved')
       .doc(props.approvedUser)
       .collection('store')
       .doc(id)
       .collection('stocks')
-      .onSnapshot(data => {
+      .get()
+      .then(data => {
         data.docs.forEach(item => {
           stocksArr.push(item.data())
         })
         setAvailablesStock([...stocksArr]);
         stocksArr = [];
-      })
+      });
+
 
       firebase.firestore()
         .collection('approved')
@@ -130,7 +141,8 @@ const StorePage = (props) => {
         .collection('transactions')
         .doc(currentDate)
         .collection('sales')
-        .onSnapshot(res => { 
+        .get()
+        .then(res => { 
           res.forEach((item) => {
             profit += item.data().totalAmount
             salesArr.push(item.data());
@@ -139,7 +151,7 @@ const StorePage = (props) => {
           profit = 0;
           setSales([...salesArr]);
           salesArr=[];
-        })
+        });
 
 
         firebase.firestore()
@@ -150,7 +162,8 @@ const StorePage = (props) => {
         .collection('transactions')
         .doc(currentDate)
         .collection('expenses')
-        .onSnapshot(res => { 
+        .get()
+        .then(res => { 
           res.forEach((item) => { 
             expensesArr.push(item.data());
           })
@@ -171,30 +184,32 @@ const StorePage = (props) => {
     })
   }
 
+  //overViewSubmitted
+  const overViewSubmitted = (e) => {
+    e.preventDefault();
 
-  //delete sold stock
-  const deleteSoldStock = (itemId) => { 
-    console.log('you are about to delete a sold stock')
+    console.log(overViewDate);
   }
+
 
   let [availablesStock, setAvailablesStock] = useState([]);
   let [view, setView] = useState('allStocks');
   let [sales, setSales] = useState([]);
   let [expenses, setExpenses] = useState([]);
   let [profit, setProfit] = useState(0);
-
+  let [overViewDate, setOverViewDate] = useState();
 
   return ( 
-    <div className="StorePage">
+    <div className='StorePage'>
       <LoggedInHeader 
         signOut={props.signOut}
         userImg= {props.userImg}
       />
 
-      <div className="storePageBody">
+      <div className='storePageBody'>
         <Sidebar />
-        <div className="storePageMain">
-          <div className="header">
+        <div className='storePageMain'>
+          <div className='header'>
             <h1>{id}</h1>
             { 
               props.admin 
@@ -210,7 +225,7 @@ const StorePage = (props) => {
               : 
               ''
             }
-            <div className="options">
+            <div className='options'>
               <p 
                 id='stocks'
                 onClick={optionClicked}
@@ -238,6 +253,15 @@ const StorePage = (props) => {
               >
                 today expenses
               </p>
+              <p 
+                id='overview'
+                onClick={optionClicked}
+                style={{
+                  opacity: `${(view === 'overview') ? '1' : '0.2'}`
+                }}
+              >
+                overview
+              </p>
             </div>
           </div>
 
@@ -245,7 +269,7 @@ const StorePage = (props) => {
             style={{
               display: `${(view === 'allStocks') ? 'block' : 'none'}`
             }}
-            className="allStocks"
+            className='allStocks'
           >
             { 
               availablesStock.map((item, index) => { 
@@ -262,7 +286,7 @@ const StorePage = (props) => {
                     />
                     <div 
                       data-name={item.stockName}
-                      id={item.stockQuantity} className="done"
+                      id={item.stockQuantity} className='done'
                       onClick={doneBttnClicked}
                     >
 
@@ -277,9 +301,9 @@ const StorePage = (props) => {
             style={{
               display: `${(view === 'sales') ? 'block' : 'none'}`
             }}
-            className="sales"
+            className='sales'
           >
-          <div className="top">
+          <div className='top'>
             <h3>Item Name</h3>
             <h3>Item Quantity</h3>
             <h3>Updated Date</h3>
@@ -322,7 +346,7 @@ const StorePage = (props) => {
             style={{
               display: `${(view === 'expenses') ? 'block' : 'none'}`
             }}
-            className="expense"
+            className='expense'
           >
             { 
               expenses.length > 0 
@@ -360,6 +384,31 @@ const StorePage = (props) => {
                 no expenses to display
               </h1>
             }
+          </div>
+          <div 
+            className='overview'
+            style={{ 
+              display: `${view === 'overview' ? 'block' : 'none'}`
+            }}
+          >
+            <form
+              onSubmit={overViewSubmitted}
+            >
+              <input 
+                type='date' 
+                value='1998-11-25'
+                onChange={(e) => {
+                  let date = e.target.value;
+                  setOverViewDate(date)
+                }}
+              />
+              <button></button>
+            </form>
+            <div className='top'>
+              <h3>Item Name</h3>
+              <h3>Item Quantity</h3>
+              <h3>Updated Date</h3>
+          </div>
           </div>
         </div>
       </div>
