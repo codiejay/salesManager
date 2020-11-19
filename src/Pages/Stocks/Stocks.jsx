@@ -45,16 +45,15 @@ const Stocks = (props) => {
     
     useEffect(() => { 
       let stockArr = [];
-      stocksRef
-      .where('stockQuantity', '>' , 0)
-        .get()
-        .then(res => { 
-          res.docs.forEach(item => {
-            stockArr.push(item.data())
+        let db = stocksRef;
+          db
+          .where('stockQuantity', '>' , 0)
+          .get().then(res => { 
+            res.docs.forEach(item => {
+              stockArr.push(item.data());
+              setStockList([...stockArr]);
+            })
           })
-          setStockList([...stockArr]);
-          stockArr = [];
-        })
     } ,[]);
 
     useEffect(() => {

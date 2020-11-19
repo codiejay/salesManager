@@ -21,6 +21,11 @@ const App = () => {
 
 
   //set current store. this is coming from storePage
+  const handlerOverViewDate = (e) => {
+    console.log('got here')
+    setOverViewDate(e);
+  }
+
   const setCurrentStore = (e) => {
     setCurrentStoreName(e)
   }
@@ -229,6 +234,8 @@ const App = () => {
   //hooks for stores stocks page
   const [StoreStock, setStoreStock] = useState([]);
 
+  //hooks for soldStock 
+  let [overViewDate, setOverViewDate] = useState();
   //admins 
   let [isadmin, setIsAdmin] = useState(false);
   return (
@@ -236,7 +243,7 @@ const App = () => {
     ?
       <BrowserRouter>
         <Route>
-          <Redirect to='/store' />
+          <Redirect to='/manage' />
         </Route> 
         <Switch>  
           <Route 
@@ -361,6 +368,9 @@ const App = () => {
                   signOut={signOutHandler}
                   userImg={userImg}
                   approvedUser={approvedUser}
+                  setOverViewDate={(e) => {
+                    return setOverViewDate(e)
+                  }}
                 />
               )
             }}
@@ -372,6 +382,7 @@ const App = () => {
             component={() => {
               return ( 
                 <SoldStock 
+                  overViewDate={overViewDate}
                   storeName={currentStoreName}
                   loggedIn={loggedIn}
                   signOut={signOutHandler}

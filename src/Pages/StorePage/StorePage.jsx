@@ -83,8 +83,71 @@ const StorePage = (props) => {
         }
       }
     }
-    else console.log('nothign was inputed')
   }
+
+  const overViewChanged = (e) => {
+    setOverViewDate(e.target.value);
+    let mainDate = e.target.value.split('-').reverse().join(' ');
+    setShowOverViewData(true);
+    let arr = [];
+    let profit = 0;
+    if(overViewStatus.toLowerCase() === 'sales') { 
+      setOverviewExpenses([]);
+      firebase.firestore()
+      .collection('approved')
+      .doc(props.approvedUser)
+      .collection('store')
+      .doc(id.toLowerCase())
+      .collection('transactions')
+      .doc(mainDate)
+      .collection('sales')
+      .get()
+      .then(res => { 
+        res.docs.forEach(item => {
+          profit += item.data().totalAmount
+          arr.push(item.data())
+        })
+        setOverViewProfit(profit);
+        setOverviewSales([...arr]);
+        profit = 0;
+        arr = [];
+      })
+    }
+    else { 
+      firebase.firestore()
+      .collection('approved')
+      .doc(props.approvedUser)
+      .collection('store')
+      .doc(id.toLowerCase())
+      .collection('transactions')
+      .doc(mainDate)
+      .collection('expenses')
+      .get()
+      .then(res => { 
+        res.docs.forEach(item => {
+          arr.push(item.data())
+        })
+        setOverviewExpenses([...arr]);
+        arr = [];
+      })
+    };
+
+    props.setOverViewDate(mainDate);
+
+  };
+
+  const overViewOptions = (e) => {
+    let text = e.target.textContent.toLowerCase();
+
+    if(text === 'expenses') { 
+      setOverViewStatus('expenses')
+    }
+    else { 
+      setOverViewStatus('sales')
+    }
+  }
+
+  
   //optionsClicked
   const optionClicked = (e) => {
 
@@ -110,6 +173,9 @@ const StorePage = (props) => {
   }
 
   useEffect(() => {
+    let overViewCurrentDate = `${dateClass.getFullYear()}-${dateClass.getMonth()+1}-${dateClass.getDate()}`;
+    
+    setOverViewDate(overViewCurrentDate);
     props.setCurrentStore(id);
 
     let salesArr = [];
@@ -184,22 +250,21 @@ const StorePage = (props) => {
     })
   }
 
-  //overViewSubmitted
-  const overViewSubmitted = (e) => {
-    e.preventDefault();
 
-    console.log(overViewDate);
-  }
-
+  
 
   let [availablesStock, setAvailablesStock] = useState([]);
-  let [view, setView] = useState('allStocks');
+  let [view, setView] = useState();
   let [sales, setSales] = useState([]);
   let [expenses, setExpenses] = useState([]);
   let [profit, setProfit] = useState(0);
   let [overViewDate, setOverViewDate] = useState();
-
-  return ( 
+  let [overviewSales, setOverviewSales] = useState([]);
+  let [overviewExpenses, setOverviewExpenses] = useState([]);
+  let [overViewStatus, setOverViewStatus] = useState('sales');
+  let [showOverViewData, setShowOverViewData] = useState(false);
+  let [overViewProfit, setOverViewProfit] = useState(0)
+  return (  
     <div className='StorePage'>
       <LoggedInHeader 
         signOut={props.signOut}
@@ -311,9 +376,10 @@ const StorePage = (props) => {
             { 
               sales.length > 0 
               ? 
-                sales.map((item) => { 
+                sales.map((item, index) => { 
                   return ( 
                     <StockItem 
+                      key={index}
                       location={id}
                       itemId={`/${item.id}`}
                       itemName={item.stockName}
@@ -351,9 +417,10 @@ const StorePage = (props) => {
             { 
               expenses.length > 0 
               ? 
-                expenses.map((item) => { 
+                expenses.map((item, index) => { 
                   return ( 
                     <Expenses 
+                      key={index}
                       cost={item.expenses.cost}
                       attendant={item.attendant}
                       expenseTitle={item.expenses.title}
@@ -385,30 +452,145 @@ const StorePage = (props) => {
               </h1>
             }
           </div>
+
           <div 
             className='overview'
             style={{ 
               display: `${view === 'overview' ? 'block' : 'none'}`
             }}
           >
-            <form
-              onSubmit={overViewSubmitted}
-            >
-              <input 
-                type='date' 
-                value='1998-11-25'
-                onChange={(e) => {
-                  let date = e.target.value;
-                  setOverViewDate(date)
+            <div className="overviewOptions">
+              <p
+                onClick={overViewOptions}
+                style={{ 
+                  opacity: `${overViewStatus === 'sales' ? '1' : '0.4'}`
                 }}
+              >
+                Sales
+              </p>
+              <p
+                onClick={overViewOptions}
+                style={{ 
+                  opacity: `${overViewStatus === 'expenses' ? '1' : '0.4'}`
+                }}
+              >
+                Expenses
+              </p>
+            </div>
+
+            <form>
+              <input 
+                max={`${dateClass.getFullYear()}-${dateClass.getMonth()+1}-${dateClass.getDate()}`}
+                min='2020-11-15'
+                type='date' 
+                value={overViewDate ? overViewDate : ''}
+                onChange={overViewChanged}
               />
-              <button></button>
             </form>
-            <div className='top'>
-              <h3>Item Name</h3>
-              <h3>Item Quantity</h3>
-              <h3>Updated Date</h3>
-          </div>
+
+            <div 
+              style={{
+                display: `${showOverViewData ? 'block' : 'none'}`
+              }}
+              className="OverViewData"
+            >
+            <div className="profit">
+              <h3>
+                Day's Cash At Hand: ₦{overViewProfit.toLocaleString()}
+              </h3>
+            </div>
+            
+              <div 
+                id='overViewSales'
+                style={{ 
+                  display: `${overViewStatus === 'sales' ? 'block' : 'none'}`
+                }}
+              > 
+                <div className='top'>
+                  <h3>Item Name</h3>
+                  <h3>Item Quantity</h3>
+                  <h3>Updated Date</h3>
+                </div>
+                { 
+                overviewSales.length > 0 
+                ? 
+                  overviewSales.map((item, index) => { 
+                    return ( 
+                      <StockItem 
+                        key={index}
+                        location={id}
+                        itemId={`/${item.id}`}
+                        itemName={item.stockName}
+                        itemQuantity={item.stockQuantity}
+                        lastUpdate={item.date}
+                        itemLastUpdate='0'
+                      />
+                    )
+                  })
+                : 
+                <h1 
+                  style={{ 
+                    color: 'white',
+                    fontSize: '1em',
+                    textTransform: 'uppercase',
+                    width: 'fit-content',
+                    padding: '0.5em 0.9em',
+                    backgroundColor: 'white',
+                    color: 'black',
+                    marginTop: '2em',
+                    borderRadius: '300px'
+                  }}
+                >
+                  no sales to display
+                </h1>
+              }
+              </div>
+
+              <div 
+                id='overViewExpenses'
+                style={{ 
+                  display: `${overViewStatus === 'expenses' ? 'block' : 'none'}`
+                }}
+              > 
+                { 
+                  overviewExpenses.length > 0 
+                  ? 
+                    overviewExpenses.map((item) => { 
+                      return ( 
+                        <Expenses 
+                          cost={item.expenses.cost}
+                          attendant={item.attendant}
+                          expenseTitle={item.expenses.title}
+                          expenseBody={item.expenses.body}
+                          expenseDate={item.date}
+                          expenseTime={item.time}
+                          id={item.id}
+                          deleteExpense={() => {
+                            return deleteExpenses(item.id)
+                          }}
+                        />
+                      )
+                    })
+                  : 
+                  <h1 
+                    style={{ 
+                      color: 'white',
+                      fontSize: '1em',
+                      textTransform: 'uppercase',
+                      width: 'fit-content',
+                      padding: '0.5em 0.9em',
+                      backgroundColor: 'white',
+                      color: 'black',
+                      marginTop: '2em',
+                      borderRadius: '300px'
+                    }}
+                  >
+                    no expenses to display
+                  </h1>
+                }
+              </div>
+            </div>
+
           </div>
         </div>
       </div>

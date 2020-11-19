@@ -8,8 +8,9 @@ import './SoldStock.scss';
 
 const SoldStock = (props) => { 
 
+  console.log(props.overViewDate);
 
-  let dateClass = new Date()
+  let dateClass = new Date();
   let currentDate = `${dateClass.getDate()} ${dateClass.getMonth()+1} ${dateClass.getFullYear()}`
   let id = useParams().id;
 

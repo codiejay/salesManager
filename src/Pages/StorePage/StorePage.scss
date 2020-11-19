@@ -58,16 +58,17 @@
                   display: grid;
                   grid-template-columns: 4fr 1fr;
                   gap: 1em;
+                  margin-bottom: 1em;
                     input { 
                       font-size: 16px;
                       width: fit-content;
-                      padding: 0.5em 0.2em;
+                      padding: 0.3em 0.4em;
                       border: none;
                       border-radius: 900px;
                     }
                     button { 
-                      width: 50px;
-                      height: 50px;
+                      width: 35pxj;
+                      height: 35pxj;
                       margin: 0 auto;
                       background: white url('../../Assets/search.svg') no-repeat center/30%;
                       border: none;
@@ -76,11 +77,40 @@
                     }
                 }
                 .top { 
-                  width: 95%;
+                  width: 90%;
                   display: grid;
                   grid-template-columns: 70% 15% 15%;
                   color: white;
                   margin-top: 2em;
+                }
+                .overviewOptions { 
+                  transition: all 1s;
+                  display: grid;
+                  grid-template-columns: 1fr 1fr;
+                  width: fit-content;
+                  margin-bottom: 2em;
+                  text-align: left;
+                    p { 
+                      transition: all 0.7s;
+                      user-select: none;
+                      cursor: pointer;
+                      width: fit-content;
+                      padding: 0.4em 0.8em;
+                      background-color: white;
+                      border-radius: 900px;
+                    }
+                }
+                .OverViewData { 
+                    #overViewSales { 
+                        a { 
+                          background-color: red  !important;
+                          width: 90%;
+                          margin: 0.9em 0;
+                        }
+                    }
+                    .profit { 
+                      color: white;
+                    }
                 }
                 
             }
