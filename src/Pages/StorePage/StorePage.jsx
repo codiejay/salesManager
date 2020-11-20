@@ -28,7 +28,6 @@ const StorePage = (props) => {
     let stockCurrentQuantity = parseInt(e.target.id);
     let newValue = parseInt(e.target.previousElementSibling.value);
     let elemName = e.target.dataset.name;
-
     let storeRef = firebase.firestore()
       .collection('approved')
       .doc(props.approvedUser)
@@ -47,16 +46,20 @@ const StorePage = (props) => {
     if(newValue >= 0) { 
       if(newValue !== stockCurrentQuantity) { 
         if(newValue > stockCurrentQuantity) { 
-          storeRef.get()
-            .then(d => {
+          storeRef
+            .get().then(d => {
               let mainStockQuantity = d.data().stockQuantity;
-              if(mainStockQuantity >= parseInt(newValue)) { 
+              if(mainStockQuantity >= parseInt(newValue) - parseInt(stockCurrentQuantity)) { 
                 storeStockRef.update({ 
                   stockQuantity: newValue
                 })
                 storeRef.update({ 
                   stockQuantity: mainStockQuantity-parseInt(newValue - stockCurrentQuantity)
                 })
+              }
+              else { 
+              console.log('it got here')
+                
               }
             })
         }
@@ -73,7 +76,7 @@ const StorePage = (props) => {
               }
               else { 
                 storeRef.update({ 
-                  stockQuantity: doc.data().stockQuantity + parseInt(newValue + stockCurrentQuantity )
+                  stockQuantity: doc.data().stockQuantity + parseInt(newValue - stockCurrentQuantity )
                 });
                 storeStockRef.update({ 
                   stockQuantity: newValue,
@@ -132,7 +135,7 @@ const StorePage = (props) => {
       })
     };
 
-    props.setOverViewDate(mainDate);
+    // props.setOverViewDate(mainDate);
 
   };
 
@@ -189,8 +192,7 @@ const StorePage = (props) => {
       .collection('store')
       .doc(id)
       .collection('stocks')
-      .get()
-      .then(data => {
+      .onSnapshot(data => {
         data.docs.forEach(item => {
           stocksArr.push(item.data())
         })
@@ -228,8 +230,7 @@ const StorePage = (props) => {
         .collection('transactions')
         .doc(currentDate)
         .collection('expenses')
-        .get()
-        .then(res => { 
+        .onSnapshot(res => { 
           res.forEach((item) => { 
             expensesArr.push(item.data());
           })
@@ -250,8 +251,6 @@ const StorePage = (props) => {
     })
   }
 
-
-  
 
   let [availablesStock, setAvailablesStock] = useState([]);
   let [view, setView] = useState();

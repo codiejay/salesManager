@@ -48,7 +48,7 @@ const Stocks = (props) => {
         let db = stocksRef;
           db
           .where('stockQuantity', '>' , 0)
-          .get().then(res => { 
+          .onSnapshot(res => { 
             res.docs.forEach(item => {
               stockArr.push(item.data());
               setStockList([...stockArr]);
