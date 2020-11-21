@@ -265,16 +265,10 @@ const StockPage = (props)  => {
               </div>
 
             </div>
-            { 
-              props.admin 
-              ? 
-              <button
+            <button
             > 
               {updateButton} 
             </button>
-            : 
-            ''
-            }
           </form>
         </div>
       </div>
