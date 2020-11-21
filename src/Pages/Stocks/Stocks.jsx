@@ -51,8 +51,8 @@ const Stocks = (props) => {
           .onSnapshot(res => { 
             res.docs.forEach(item => {
               stockArr.push(item.data());
-              setStockList([...stockArr]);
-            })
+            });
+            setStockList([...stockArr]);
           })
     } ,[]);
 
@@ -174,7 +174,6 @@ const Stocks = (props) => {
                 />
                 )
               })
-            
             }
           </div>
           <div 

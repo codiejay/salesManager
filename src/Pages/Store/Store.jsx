@@ -1,12 +1,44 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
+import firebase from '../../Firebase';
 import Sidebar from '../../Components/Sidebar/Sidebar';
 import LoggedInHeader from '../../Components/LoggedInHeader/LoggedInHeader';
 import './Store.scss';
-
+import { useState } from 'react';
 
 const Store = (props) => { 
 
+  let storeRef = firebase.firestore()
+  .collection('approved')
+  .doc(props.approvedUser)
+  .collection('stock')
+
+  useState(() => {
+    let profit = 0;
+    let len = 0;
+    storeRef
+      .where('stockQuantity', '>', 0)
+      .get()
+      .then(res => {
+        res.docs.forEach(item => {
+          len += item.data().stockQuantity;
+        });
+        setStockTotal(len);
+      });
+
+    storeRef
+      .where('stockQuantity', '>', 0)
+      .get()
+      .then(doc => {
+        doc.docs.forEach(item => { 
+          profit += item.data().sellingPrice;
+        })
+        setProfit(profit);
+      });
+  },[])
+
+  let [stockTotal, setStockTotal] = useState(0);
+  let [profit, setProfit] = useState(0);
   return ( 
     props.loggedIn 
     ?
@@ -18,26 +50,18 @@ const Store = (props) => {
       <div id='storeBody'>
         <Sidebar />
         { 
-          props.admin 
-          ? 
           <div className="storeMain">
-          <div id='cashStatus'>
-            <h3>{props.cashTotal}</h3>
-            <p>Today's sales in cash</p>
-          </div>
+            <div id='cashStatus'>
+              <h3>{stockTotal}</h3>
+              <p>Stocks Available</p>
+            </div>
 
-          <div id='cashStatus'>
-            <h3>{props.cashReturn}</h3>
-            <p>Expected Cash Return</p>
-          </div>
+            <div id='cashStatus'>
+              <h3>{profit.toLocaleString()}</h3>
+              <p>Estimated Cash Return</p>
+            </div>
 
-          <div id='cashStatus'>
-            <h3>{props.cashProfit}</h3>
-            <p>Expected Profit</p>
-          </div>
         </div>
-        : 
-        ''
         }
       </div>
     </div>

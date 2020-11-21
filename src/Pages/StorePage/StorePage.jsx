@@ -185,7 +185,23 @@ const StorePage = (props) => {
     let stocksArr = [];
     let expensesArr = [];
     let profit = 0;
-    
+    //getting length of available stock 
+    let length = 0;
+    firebase.firestore()
+      .collection('approved')
+      .doc(props.approvedUser)
+      .collection('store')
+      .doc(id)
+      .collection('stocks')
+      .where('stockQuantity', '>', 0)
+      .get()
+      .then(doc => {
+        doc.docs.forEach(item => { 
+          length += item.data().stockQuantity;
+        });
+        setStockTotal(length);
+      });
+
     firebase.firestore()
       .collection('approved')
       .doc(props.approvedUser)
@@ -237,7 +253,7 @@ const StorePage = (props) => {
           setExpenses([...expensesArr]);
           expensesArr=[];
         })
-  }, [])
+  }, [0])
 
   //delete expenses 
   const deleteExpenses = (item) => { 
@@ -262,7 +278,9 @@ const StorePage = (props) => {
   let [overviewExpenses, setOverviewExpenses] = useState([]);
   let [overViewStatus, setOverViewStatus] = useState('sales');
   let [showOverViewData, setShowOverViewData] = useState(false);
-  let [overViewProfit, setOverViewProfit] = useState(0)
+  let [overViewProfit, setOverViewProfit] = useState(0);
+  let [stockTotal, setStockTotal] = useState(0);
+
   return (  
     <div className='StorePage'>
       <LoggedInHeader 
@@ -281,7 +299,7 @@ const StorePage = (props) => {
               <h3 style={{ 
                 color: 'white',
                 fontSize: '1.em',
-                marginBottom: '2em'
+                marginBottom: '0em'
               }}
               >
                 Today's Profit: {profit}
@@ -289,6 +307,14 @@ const StorePage = (props) => {
               : 
               ''
             }
+            <h3 style={{ 
+              color: 'white',
+              fontSize: '1.em',
+              marginBottom: '2em'
+            }}
+            >
+              Stock Available: {stockTotal}
+            </h3>
             <div className='options'>
               <p 
                 id='stocks'

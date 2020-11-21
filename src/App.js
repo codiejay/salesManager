@@ -17,14 +17,7 @@ const App = () => {
 
   let approvedUser = 'bolu';
   let userName = firebase.auth().currentUser;
-  let adminList = ['akpan', 'bolu', 'agbelemo'];
 
-
-  //set current store. this is coming from storePage
-  const handlerOverViewDate = (e) => {
-    console.log('got here')
-    setOverViewDate(e);
-  }
 
   const setCurrentStore = (e) => {
     setCurrentStoreName(e)
@@ -64,8 +57,7 @@ const App = () => {
   }
 
   //function for addStore page 
-  const makeNewStore = (store, attendant) =>{ 
-
+  const makeNewStore = (store, attendant) => { 
     if(store.length > 0 && attendant.pin.length > 4) {
 
       let dateClass = new Date();
@@ -192,7 +184,8 @@ const App = () => {
           name === 'akpan' ||
           name === 'james' ||
           name === 'samuel' ||
-          name === 'boluwatife'
+          name === 'boluwatife' ||
+          name === 'leumastek'
         ) { 
           setIsAdmin(true);
         }
@@ -238,6 +231,7 @@ const App = () => {
   let [overViewDate, setOverViewDate] = useState();
   //admins 
   let [isadmin, setIsAdmin] = useState(false);
+
   return (
     loggedIn 
     ?
@@ -251,7 +245,8 @@ const App = () => {
             path='/store'
             component={() => {
               return (
-              <Store 
+              <Store
+                approvedUser={approvedUser}
                 admin={isadmin}
                 loggedIn={loggedIn}
                 userImg={userImg}
@@ -414,7 +409,13 @@ const App = () => {
           <Route 
             exact
             path='/store'
-            component={Store}
+            component={() => {
+              return ( 
+                <Store 
+                approvedUser={approvedUser}
+                />
+              )
+            }}
           >
           </Route>
           <Route
