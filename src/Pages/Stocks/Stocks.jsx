@@ -94,16 +94,13 @@ const Stocks = (props) => {
       let outOfStockArr = []
       let mounted = true
       
-      let stocksRef = firebase.firestore()
-      
+      firebase.firestore()
       .collection('approved')
       .doc(approvedUser)
       .collection('stock')
       .where('stockQuantity', '==', 0)
       .get()
       .then(res => {
-        
-          
           res.docs.forEach(item => { 
             outOfStockArr.push(item.data())
           })
@@ -113,7 +110,6 @@ const Stocks = (props) => {
           outOfStockArr = [];
         
       })
-    
       return () => mounted = false;
     }, [])
 

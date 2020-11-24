@@ -8,11 +8,11 @@ import './SoldStock.scss';
 
 const SoldStock = (props) => { 
 
-  console.log(props.overViewDate);
-
   let dateClass = new Date();
   let currentDate = `${dateClass.getDate()} ${dateClass.getMonth()+1} ${dateClass.getFullYear()}`
   let id = useParams().id;
+
+  console.log(id);
 
   const stockRef = firebase.firestore()
   .collection('approved')
@@ -87,7 +87,7 @@ const SoldStock = (props) => {
         stock ? 
         <div className="soldstockMain">
 
-        <div className="details">
+        <div className="details" data-print='noPrint'>
           <div className="itemDetails">
             <div className="itemDetailsHeader">
               <h3 className="label">
@@ -220,11 +220,48 @@ const SoldStock = (props) => {
         </div>
 
         <div className="printWindow">
+          <div className="header">
+            <h1>Leumastek Phones</h1>
+            <h3> {props.storeName} branch </h3>
+            <h3>FOR INQUIRES, PLEASE CALL <br></br> 070-8162-1699</h3>
+            <h5><b>Date: </b>{stock.date.split(' ').join('/')}</h5>
+            <h5><b>Time: </b>{stock.time}</h5>
+            <h5><b>Customer Name: </b>{stock.customerName}</h5>
+            <h5><b>imei: </b>{stock.imei}</h5>
+          </div>
+            <div className="details">
+              <div className="top">
+                <p>Goods Bought</p>
+                <p>Qty</p>
+                <p>Unit Price</p>
+              </div>
+              <div className="data">
+                <h3> {stock.stockName} </h3>
+                <h3> {stock.stockQuantity} </h3>
+                <h3> {stock.sellingPrice.toLocaleString()} </h3>
+              </div>
 
+              <div className="total">
+                <h2>Total:</h2>
+                <h2>{stock.totalAmount.toLocaleString()}</h2>
+              </div>
+
+              <p id='note'>Thanks for your patronage</p>
+            </div>
+
+            <button
+              onClick={() => {
+                window.print()
+                window.print()
+              }}
+            >
+              <div id='printer'></div>
+              Print Receipt
+            </button>
         </div>
       </div>
       : 
-      <h2>fetching data</h2>
+      <h2 data-print='noPrint'>fetching data</h2>
       }
 
     </div>

@@ -12,13 +12,14 @@ const LoggedInHeader = (props) => {
     transform: 'scale(0.8)'
   }
   return ( 
-    <nav id='nav'>
+    <nav id='nav' data-print='noPrint'>
       <Link to='/store'><div id="menuButton"><div></div></div></Link>
       <div className="userAvatar">
         <div style={avatarStyle}></div>
       </div>
       <button 
         onClick={props.signOut}
+        data-print='noPrint'
       >
         sign out
       </button>

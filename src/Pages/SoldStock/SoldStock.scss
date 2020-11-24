@@ -1,15 +1,20 @@
 @import '../../Assets/CSS/variables';
-
+@media print { 
+  [data-print='noPrint'], button { 
+    display: none !important;
+  }
+}
 #soldstockpage { 
   user-select: none;
 
     .soldstockMain { 
       padding-bottom: 2em;
       padding-top: 5%;
-      padding-left: 2%;
+      // padding-left: 2%;
       display: grid;
       grid-template-columns: 60% 40%;
         .details{ 
+          padding-left: 4em;
           h3 { 
             font-size: 1.5em;
             background-color: white;
@@ -104,6 +109,89 @@
         }
         .printWindow { 
           border-left: 1px solid rgb(255, 255, 255);
+          background-color: white;
+            .header {
+              margin-bottom: 2em; 
+                h1 { 
+                  font-family: 'Playfair Display', serif !important;
+                  text-align: center;
+                  font-size: 18px;
+                }
+                h3 { 
+                  font-weight: 400;
+                  text-transform: uppercase;
+                  text-align: center;
+                  margin-bottom: 0em;
+                  font-size: 9px;
+                }
+                h3:nth-child(3) { 
+                  margin-bottom: 2em;
+                }
+                h5 { 
+                  width: 95%;
+                  margin: 0 auto 0.3em auto;
+                  font-size: 9px;
+                }
+
+            }
+            .details { 
+               padding-left: 0;
+                h3 { 
+                  font-size: 8px;
+                }
+                .top { 
+                  display: grid;
+                  grid-template-columns: 3fr 1fr 2fr;
+                  font-weight: 900;
+                  font-size: 13px;
+                  text-transform: uppercase;
+                  font-size: 8px;
+                  gap: 1em;
+                }
+                .data { 
+                  border: 1px dotted black;
+                  display: grid;
+                  grid-template-columns: 3fr 1fr 2fr;
+                  color: $darkshade;
+                  text-transform: capitalize;
+                  font-size: 8px;
+                }
+                .total { 
+                  margin: 3em auto 2em auto;
+                  display: grid;
+                  grid-template-columns: 5fr 1fr 1fr;
+                  font-size: 10px;
+                  text-decoration: underline;
+                }
+
+                #note { 
+                  font-weight: 900;
+                  // width: 95%;
+                  margin: 3em auto 2em auto;
+                  font-size: 10px;
+                  font-weight: 400;
+                }
+            }
+
+            button { 
+              display: grid;
+              grid-template-columns: 1fr 8fr;
+              width: 30%;
+              margin: 3em auto 2em auto;
+              background-color: $darkshade;
+              border: none;
+              padding: 0.9em 0.8em;
+              text-align: center;
+              border-radius: 9px;
+              cursor: pointer;
+              color: white;
+              font-weight: 900;
+                #printer { 
+                  background: url('../../Assets/printer.svg') no-repeat center/100%;
+                  width: 100%;
+                  height: 100%;
+                }
+            }
         }
 
     }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import firebase from '../../Firebase';
 import Sidebar from '../../Components/Sidebar/Sidebar';
@@ -13,11 +13,11 @@ const Store = (props) => {
   .doc(props.approvedUser)
   .collection('stock')
 
-  useState(() => {
+  useEffect(() => {
     let profit = 0;
     let len = 0;
-    let mounted = false
-    if (mounted){
+    let mounted = true
+
     storeRef
       .where('stockQuantity', '>', 0)
       .get()
@@ -25,7 +25,9 @@ const Store = (props) => {
         res.docs.forEach(item => {
           len += item.data().stockQuantity;
         });
-        setStockTotal(len);
+        if(mounted) { 
+          setStockTotal(len);
+        }
       });
     
     storeRef
@@ -35,14 +37,16 @@ const Store = (props) => {
         doc.docs.forEach(item => { 
           profit += item.data().sellingPrice;
         })
-        setProfit(profit);
+        if(mounted) { 
+          setProfit(profit);
+        }
       });
-    }
-    return () => mounted = true;
+
+    return () => mounted = false;
   },[])
 
-  let [stockTotal, setStockTotal] = useState(0);
-  let [profit, setProfit] = useState(0);
+  let [stockTotal, setStockTotal] = useState('loading');
+  let [profit, setProfit] = useState('loading');
   return ( 
     props.loggedIn 
     ?

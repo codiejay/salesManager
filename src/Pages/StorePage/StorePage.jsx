@@ -94,49 +94,45 @@ const StorePage = (props) => {
     setShowOverViewData(true);
     let arr = [];
     let profit = 0;
-    if(overViewStatus.toLowerCase() === 'sales') { 
-      setOverviewExpenses([]);
-      firebase.firestore()
-      .collection('approved')
-      .doc(props.approvedUser)
-      .collection('store')
-      .doc(id.toLowerCase())
-      .collection('transactions')
-      .doc(mainDate)
-      .collection('sales')
-      .get()
-      .then(res => { 
-        res.docs.forEach(item => {
-          profit += item.data().totalAmount
-          arr.push(item.data())
-        })
-        setOverViewProfit(profit);
-        setOverviewSales([...arr]);
-        profit = 0;
-        arr = [];
+    //Get sales
+    setOverviewExpenses([]);
+    firebase.firestore()
+    .collection('approved')
+    .doc(props.approvedUser)
+    .collection('store')
+    .doc(id.toLowerCase())
+    .collection('transactions')
+    .doc(mainDate)
+    .collection('sales')
+    .get()
+    .then(res => { 
+      res.docs.forEach(item => {
+        profit += item.data().totalAmount
+        arr.push(item.data())
       })
-    }
-    else { 
-      firebase.firestore()
-      .collection('approved')
-      .doc(props.approvedUser)
-      .collection('store')
-      .doc(id.toLowerCase())
-      .collection('transactions')
-      .doc(mainDate)
-      .collection('expenses')
-      .get()
-      .then(res => { 
-        res.docs.forEach(item => {
-          arr.push(item.data())
-        })
-        setOverviewExpenses([...arr]);
-        arr = [];
+      setOverViewProfit(profit);
+      setOverviewSales([...arr]);
+      profit = 0;
+      arr = [];
+    });
+
+    //get expenses
+    firebase.firestore()
+    .collection('approved')
+    .doc(props.approvedUser)
+    .collection('store')
+    .doc(id.toLowerCase())
+    .collection('transactions')
+    .doc(mainDate)
+    .collection('expenses')
+    .get()
+    .then(res => { 
+      res.docs.forEach(item => {
+        arr.push(item.data())
       })
-    };
-
-    // props.setOverViewDate(mainDate);
-
+      setOverviewExpenses([...arr]);
+      arr = [];
+    })
   };
 
   const overViewOptions = (e) => {
@@ -177,7 +173,7 @@ const StorePage = (props) => {
 
   useEffect(() => {
     let overViewCurrentDate = `${dateClass.getFullYear()}-${dateClass.getMonth()+1}-${dateClass.getDate()}`;
-    
+    let mounted = true;
     setOverViewDate(overViewCurrentDate);
     props.setCurrentStore(id);
 
@@ -199,7 +195,9 @@ const StorePage = (props) => {
         doc.docs.forEach(item => { 
           length += item.data().stockQuantity;
         });
-        setStockTotal(length);
+        if(mounted) { 
+          setStockTotal(length);
+        }
       });
 
     firebase.firestore()
@@ -212,8 +210,11 @@ const StorePage = (props) => {
         data.docs.forEach(item => {
           stocksArr.push(item.data())
         })
-        setAvailablesStock([...stocksArr]);
-        stocksArr = [];
+        if(mounted) { 
+          setAvailablesStock([...stocksArr]);
+          stocksArr = [];
+        }
+
       });
 
 
@@ -231,10 +232,12 @@ const StorePage = (props) => {
             profit += item.data().totalAmount
             salesArr.push(item.data());
           })
-          setProfit(`₦${profit.toLocaleString()}`);
-          profit = 0;
-          setSales([...salesArr]);
-          salesArr=[];
+          if(mounted) { 
+            setProfit(`₦${profit.toLocaleString()}`);
+            profit = 0;
+            setSales([...salesArr]);
+            salesArr=[];
+          }
         });
 
 
@@ -250,9 +253,13 @@ const StorePage = (props) => {
           res.forEach((item) => { 
             expensesArr.push(item.data());
           })
-          setExpenses([...expensesArr]);
-          expensesArr=[];
-        })
+          if(mounted) {
+            setExpenses([...expensesArr]);
+            expensesArr=[];
+          }
+        });
+
+        return () => {mounted = false}
   }, [0])
 
   //delete expenses 
@@ -484,25 +491,6 @@ const StorePage = (props) => {
               display: `${view === 'overview' ? 'block' : 'none'}`
             }}
           >
-            <div className="overviewOptions">
-              <p
-                onClick={overViewOptions}
-                style={{ 
-                  opacity: `${overViewStatus === 'sales' ? '1' : '0.4'}`
-                }}
-              >
-                Sales
-              </p>
-              <p
-                onClick={overViewOptions}
-                style={{ 
-                  opacity: `${overViewStatus === 'expenses' ? '1' : '0.4'}`
-                }}
-              >
-                Expenses
-              </p>
-            </div>
-
             <form>
               <input 
                 max={`${dateClass.getFullYear()}-${dateClass.getMonth()+1}-${dateClass.getDate()}`}
@@ -520,9 +508,22 @@ const StorePage = (props) => {
               className="OverViewData"
             >
             <div className="profit">
-              <h3>
-                Day's Cash At Hand: ₦{overViewProfit.toLocaleString()}
-              </h3>
+              <h1 
+                style={{ 
+                  color: 'white',
+                  fontSize: '1em',
+                  textTransform: 'uppercase',
+                  width: 'fit-content',
+                  padding: '0.5em 0.9em',
+                  backgroundColor: 'white',
+                  color: 'black',
+                  marginTop: '2em',
+                  marginBottom: '1em',
+                  borderRadius: '300px'
+                }}
+              >
+                {overViewDate} Cash At Hand: ₦{overViewProfit.toLocaleString()}
+              </h1>
             </div>
             
               <div 
@@ -544,7 +545,7 @@ const StorePage = (props) => {
                       <StockItem 
                         key={index}
                         location={id}
-                        itemId={`/${item.id}`}
+                        itemId={`/${item.id}&${item.date}`}
                         itemName={item.stockName}
                         itemQuantity={item.stockQuantity}
                         lastUpdate={item.date}
@@ -569,49 +570,60 @@ const StorePage = (props) => {
                   no sales to display
                 </h1>
               }
-              </div>
+              { 
+                overviewExpenses.length > 0 
+                ? 
+                  overviewExpenses.map((item) => { 
+                    return ( 
+                      <div>
+                      <h1 
+                        style={{ 
+                          color: 'white',
+                          fontSize: '1em',
+                          textTransform: 'uppercase',
+                          width: 'fit-content',
+                          padding: '0.5em 0.9em',
+                          backgroundColor: 'white',
+                          color: 'black',
+                          marginTop: '2em',
+                          marginBottom: '1em',
+                          borderRadius: '300px'
+                        }}
+                      >
+                        {overViewDate} Expenses
+                      </h1>
+                      <Expenses 
+                        cost={item.expenses.cost}
+                        attendant={item.attendant}
+                        expenseTitle={item.expenses.title}
+                        expenseBody={item.expenses.body}
+                        expenseDate={item.date}
+                        expenseTime={item.time}
+                        id={item.id}
+                        deleteExpense={() => {
+                          return deleteExpenses(item.id)
+                        }}
+                      />
+                      </div>
 
-              <div 
-                id='overViewExpenses'
-                style={{ 
-                  display: `${overViewStatus === 'expenses' ? 'block' : 'none'}`
-                }}
-              > 
-                { 
-                  overviewExpenses.length > 0 
-                  ? 
-                    overviewExpenses.map((item) => { 
-                      return ( 
-                        <Expenses 
-                          cost={item.expenses.cost}
-                          attendant={item.attendant}
-                          expenseTitle={item.expenses.title}
-                          expenseBody={item.expenses.body}
-                          expenseDate={item.date}
-                          expenseTime={item.time}
-                          id={item.id}
-                          deleteExpense={() => {
-                            return deleteExpenses(item.id)
-                          }}
-                        />
-                      )
-                    })
+                    )
+                  })
                   : 
-                  <h1 
-                    style={{ 
-                      color: 'white',
-                      fontSize: '1em',
-                      textTransform: 'uppercase',
-                      width: 'fit-content',
-                      padding: '0.5em 0.9em',
-                      backgroundColor: 'white',
-                      color: 'black',
-                      marginTop: '2em',
-                      borderRadius: '300px'
-                    }}
-                  >
-                    no expenses to display
-                  </h1>
+                    <h1 
+                      style={{ 
+                        color: 'white',
+                        fontSize: '1em',
+                        textTransform: 'uppercase',
+                        width: 'fit-content',
+                        padding: '0.5em 0.9em',
+                        backgroundColor: 'white',
+                        color: 'black',
+                        marginTop: '2em',
+                        borderRadius: '300px'
+                      }}
+                    >
+                      no expenses to display
+                    </h1>
                 }
               </div>
             </div>

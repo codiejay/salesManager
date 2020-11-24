@@ -42,32 +42,6 @@ const StockPage = (props)  => {
     }
   }
 
-  //updates store's stock
-  // const updateStoreStock = (e) => { 
-  //   setStockInStoreChange(e.target.value)
-  //   firebase.firestore()
-  //     .collection('approved')
-  //     .doc(props.approvedUser)
-  //     .collection('store')
-  //     .doc(e.target.id.toLowerCase())
-  //     .collection('stocks')
-  //     .doc(stock.stockName)
-  //     .update({
-  //       stockName: stock.stockName,
-  //       stockQuantity: parseInt(e.target.value)
-  //     })
-  //     .then(() => { 
-  //       firebase.firestore()
-  //       .collection('approved')
-  //       .doc(props.approvedUser)
-  //       .collection('stock')
-  //       .doc(stock.stockName.toLowerCase())
-  //       .update({ 
-  //         stockQuantity: stock.stockQuantity - parseInt(stockInStoreChange)
-  //       })
-  //     })
-  // }
-
 
   useEffect(() => { 
     let cleanUp = firebase.firestore()
@@ -81,27 +55,6 @@ const StockPage = (props)  => {
         let arr = item.data()
         setStock(arr);
         setStockId(stockId = item.id);
-
-        //at this time 5:35am, I give up
-      //   //setting the stock into each store
-      //   props.storesList.map((item, index) => { 
-      //   let newArr = []
-      //   setStoreCount(storeCount+=1)
-      //   firebase.firestore()
-      //     .collection('approved')
-      //     .doc(props.approvedUser)
-      //     .collection('store')
-      //     .doc(item.storeName)
-      //     .collection('stocks'
-      //     .doc(stockId)
-      //     .get()
-      //     .then(doc => {
-      //       newArr.push(doc.data())
-      //       // doIt(newArr)
-      //       setStoresStock([...storesStock, storesStock.push(doc.data())])
-      //     })
-      //     setStoresStock(storesStock.push(newArr))
-      // })
       })
     })
   }, [])
@@ -117,7 +70,6 @@ const StockPage = (props)  => {
       .doc(stockId)
       .update(stock)
       .then(d => { 
-        
         props.storesList.forEach(item => {
           firebase.firestore()
             .collection('approved')

@@ -1,5 +1,9 @@
 @import '../../Assets/CSS/variables';
-
+@media print { 
+  [data-print='noPrint'], button { 
+    display: none !important;
+  }
+}
 #nav { 
   height: auto;
   display: grid;
