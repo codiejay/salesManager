@@ -16,6 +16,8 @@ const Store = (props) => {
   useState(() => {
     let profit = 0;
     let len = 0;
+    let mounted = false
+    if (mounted){
     storeRef
       .where('stockQuantity', '>', 0)
       .get()
@@ -25,7 +27,7 @@ const Store = (props) => {
         });
         setStockTotal(len);
       });
-
+    
     storeRef
       .where('stockQuantity', '>', 0)
       .get()
@@ -35,6 +37,8 @@ const Store = (props) => {
         })
         setProfit(profit);
       });
+    }
+    return () => mounted = true;
   },[])
 
   let [stockTotal, setStockTotal] = useState(0);

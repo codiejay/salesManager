@@ -44,23 +44,35 @@ const Stocks = (props) => {
   }
     
     useEffect(() => { 
+      let mounted = true
       let stockArr = [];
-        let db = stocksRef;
+      let db = stocksRef;
+      
           db
           .where('stockQuantity', '>' , 0)
           .onSnapshot(res => { 
+           
             res.docs.forEach(item => {
               stockArr.push(item.data());
             });
-            setStockList([...stockArr]);
+            if(mounted){
+              setStockList([...stockArr]);
+            }
+            
           })
+        
+          
+      return () => mounted = false;
     } ,[]);
 
     useEffect(() => {
       let runningOutArr = []
+      let mounted = true
+      
       stocksRef
       .get()
       .then(res => {
+        
         res.docs.forEach(item => { 
           let watchQty = item.data().stockWatchQuantity;
           let stockQuantity = item.data().stockQuantity;
@@ -68,26 +80,41 @@ const Stocks = (props) => {
             runningOutArr.push(item.data());
           };
         })
+        if (mounted){
         setRunningOutStocks([...runningOutArr]);
         runningOutArr = [];
+        }
+      
       })
+    
+      return () => mounted = false;
     }, [])
 
     useEffect(() => {
       let outOfStockArr = []
+      let mounted = true
+      
       let stocksRef = firebase.firestore()
+      
       .collection('approved')
       .doc(approvedUser)
       .collection('stock')
       .where('stockQuantity', '==', 0)
       .get()
       .then(res => {
-        res.docs.forEach(item => { 
-          outOfStockArr.push(item.data())
-        })
-        setOutOfStock([...outOfStockArr]);
-        outOfStockArr = [];
+        
+          
+          res.docs.forEach(item => { 
+            outOfStockArr.push(item.data())
+          })
+          if (mounted){
+          setOutOfStock([...outOfStockArr]);
+          }
+          outOfStockArr = [];
+        
       })
+    
+      return () => mounted = false;
     }, [])
 
     
