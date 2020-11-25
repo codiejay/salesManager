@@ -246,12 +246,12 @@ const SoldStock = (props) => {
                 <h2>{stock.totalAmount.toLocaleString()}</h2>
               </div>
 
-              <p id='note'>Thanks for your patronage</p>
+              <p id='note'>NB: Customers are advised to check their goods properly before acceptance as we take no responsibility of acceptance of returned goods. Goods sold in good condition are not returnable.
+No refund of money after payment.</p>
             </div>
 
             <button
               onClick={() => {
-                window.print()
                 window.print()
               }}
             >
