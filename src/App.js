@@ -29,8 +29,8 @@ const App = () => {
       .doc(approvedUser)
       .collection('store')
       .doc(e)
-      .delete()
-      .then(d => { 
+      .update({ 
+        show: false,
       })
   }
 
@@ -41,8 +41,7 @@ const App = () => {
       .doc(approvedUser)
       .collection('store')
       .where('show', '==', true)
-      .get()
-      .then(data => { 
+      .onSnapshot(data => { 
         data.docs.forEach(item => { 
           newArr.push(item.data());
         })

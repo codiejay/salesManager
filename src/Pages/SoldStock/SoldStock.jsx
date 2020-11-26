@@ -12,8 +12,6 @@ const SoldStock = (props) => {
   let currentDate = `${dateClass.getDate()} ${dateClass.getMonth()+1} ${dateClass.getFullYear()}`
   let id = useParams().id;
 
-  console.log(id);
-
   const stockRef = firebase.firestore()
   .collection('approved')
   .doc(props.approvedUser)
@@ -22,6 +20,12 @@ const SoldStock = (props) => {
   .collection('transactions')
   .doc(currentDate)
   .collection('sales');
+
+  let imieRef = firebase
+    .firestore()
+    .collection('approved')
+    .doc(props.approvedUser)
+    .collection('imei')
 
   const deleteSales = () => {
     let locationRef = window.location.href.split('/').length-2;
@@ -47,8 +51,19 @@ const SoldStock = (props) => {
                   stockQuantity: firebase.firestore.FieldValue.increment(stock.stockQuantity)
                 })
                 .then(() => {
-                  setValid(false)
+                  imieRef
+                  .where('imei', '==', stock.imei)
+                  .get()
+                  .then((res) => {
+                    res.forEach(item => { 
+                      item.ref.delete()
+                      .then(() => { 
+                        setValid(false)
+                      })
+                    })
+                  })
                 })
+
               })
           })
         })
@@ -246,8 +261,21 @@ const SoldStock = (props) => {
                 <h2>{stock.totalAmount.toLocaleString()}</h2>
               </div>
 
-              <p id='note'>NB: Customers are advised to check their goods properly before acceptance as we take no responsibility of acceptance of returned goods. Goods sold in good condition are not returnable.
-No refund of money after payment.</p>
+              <p 
+                id='note'
+              >
+                NB: Customers are advised to check their goods properly before acceptance as we take no responsibility of acceptance of returned goods. Goods sold in good condition are not returnable.
+                No refund of money after payment.
+            </p>
+            <p 
+              id='note'
+              style={{ 
+                marginTop: '20px'
+              }}
+            >
+              Attendant: {stock.staffInCharge}
+            </p>
+
             </div>
 
             <button
