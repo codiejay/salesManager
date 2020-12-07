@@ -91,6 +91,9 @@ const StorePage = (props) => {
   const overViewChanged = (e) => {
     setOverViewDate(e.target.value);
     let mainDate = e.target.value.split('-').reverse().join(' ');
+    if(parseInt(mainDate[0]) === 0) { 
+      mainDate = mainDate.substring(1);
+    };
     setShowOverViewData(true);
     let arr = [];
     let profit = 0;
