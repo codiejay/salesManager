@@ -11,6 +11,11 @@ const SoldStock = (props) => {
   let dateClass = new Date();
   let currentDate = `${dateClass.getDate()} ${dateClass.getMonth()+1} ${dateClass.getFullYear()}`
   let id = useParams().id;
+  let oldSalesDate = (window.location.href.split('%').join(' ').split('/'));
+
+  let oldDate = oldSalesDate.pop().split('.').join(' ');
+
+  let isOldSale  = (oldSalesDate.indexOf('old') === -1) ? false : true; 
 
   const stockRef = firebase.firestore()
   .collection('approved')
@@ -18,7 +23,7 @@ const SoldStock = (props) => {
   .collection('store')
   .doc(props.storeName)
   .collection('transactions')
-  .doc(currentDate)
+  .doc(isOldSale ? oldDate : currentDate)
   .collection('sales');
 
   let imieRef = firebase
@@ -77,7 +82,7 @@ const SoldStock = (props) => {
       .collection('store')
       .doc(props.storeName)
       .collection('transactions')
-      .doc(currentDate)
+      .doc(isOldSale ? oldDate : currentDate)
       .collection('sales')
       .where('id', '==', parseInt(id))
       .get()
@@ -183,7 +188,7 @@ const SoldStock = (props) => {
                 <input 
                   id='dateofsale'
                   data-fill='false'
-                  value={currentDate.split(' ').join('/')}
+                  value={!isOldSale ? currentDate.split(' ').join('/') : oldDate.split('').join('/')}
                 />
               </div>
 
@@ -289,7 +294,17 @@ const SoldStock = (props) => {
         </div>
       </div>
       : 
-      <h2 data-print='noPrint'>fetching data</h2>
+      <h2 
+        style={{
+          textAlign: 'center', 
+          background: '#1A1C23', 
+          color: '#fff',
+          textTransform: 'uppercase'
+        }} 
+        data-print='noPrint'
+      >
+        fetching data
+      </h2>
       }
 
     </div>

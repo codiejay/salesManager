@@ -548,7 +548,7 @@ const StorePage = (props) => {
                       <StockItem 
                         key={index}
                         location={id}
-                        itemId={`/${item.id}&${item.date}`}
+                        itemId={`/${item.id}/old/${item.date.split(' ').join('.')}`}
                         itemName={item.stockName}
                         itemQuantity={item.stockQuantity}
                         lastUpdate={item.date}
