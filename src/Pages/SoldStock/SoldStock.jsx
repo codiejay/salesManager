@@ -95,7 +95,8 @@ const SoldStock = (props) => {
 
   let [stock, setStock] = useState();
   let [valid, setValid] = useState(true);
-  let [storeName, setStoreName] = useState('')
+  let [storeName, setStoreName] = useState('');
+  console.log(oldDate);
   return ( 
     valid ?
     <div id='soldstockpage'>
@@ -188,7 +189,7 @@ const SoldStock = (props) => {
                 <input 
                   id='dateofsale'
                   data-fill='false'
-                  value={!isOldSale ? currentDate.split(' ').join('/') : oldDate.split('').join('/')}
+                  value={!isOldSale ? currentDate.split(' ').join('/') : oldDate.split(' ').join('/')}
                 />
               </div>
 
@@ -246,7 +247,7 @@ const SoldStock = (props) => {
             <h3>FOR INQUIRES, PLEASE CALL <br></br> 070-8162-1699</h3>
             <h5><b>Date: </b>{stock.date.split(' ').join('/')}</h5>
             <h5><b>Time: </b>{stock.time}</h5>
-            <h5><b>Customer Name: </b>{stock.customerName}</h5>
+            <h5 style={{textTransform: 'capitalize'}}><b>Customer Name: </b>{stock.customerName}</h5>
             <h5><b>imei: </b>{stock.imei}</h5>
           </div>
             <div className="details">
@@ -275,7 +276,8 @@ const SoldStock = (props) => {
             <p 
               id='note'
               style={{ 
-                marginTop: '20px'
+                marginTop: '20px',
+                textTransform: 'capitalize'
               }}
             >
               Attendant: {stock.staffInCharge}
