@@ -94,6 +94,12 @@ const StorePage = (props) => {
     if(parseInt(mainDate[0]) === 0) { 
       mainDate = mainDate.substring(1);
     };
+    let prefixDate = mainDate.split(' ');
+    if(parseInt(prefixDate[1][0]) === 0) { 
+      prefixDate[1] = prefixDate[1][1];
+    }
+    mainDate = prefixDate.join(' '); 
+    console.log(prefixDate);
     setShowOverViewData(true);
     let arr = [];
     let profit = 0;
