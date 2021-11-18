@@ -296,6 +296,23 @@ const StorePage = (props) => {
   let [showOverViewData, setShowOverViewData] = useState(false);
   let [overViewProfit, setOverViewProfit] = useState(0);
   let [stockTotal, setStockTotal] = useState(0);
+  let [availableStockTotalCost, setAvailableStockTotalCost] = useState({ 
+    sellingTotal: 0,
+    purchaseTotal: 0,
+  })
+
+  useEffect(() => {
+    availablesStock.filter((item) => {return item.stockQuantity > 1}).map((item) => {
+      
+      setAvailableStockTotalCost({ 
+        purchaseTotal: availableStockTotalCost.purchaseTotal += item.purchasePrice,
+        sellingTotal: availableStockTotalCost.sellingTotal += item.sellingPrice
+      })
+    })
+    
+  }, [JSON.stringify(availablesStock)])
+  
+  useEffect(() => {console.log(availableStockTotalCost)},[])
 
   return (  
     <div className='StorePage'>
@@ -312,14 +329,33 @@ const StorePage = (props) => {
             { 
               props.admin 
               ? 
-              <h3 style={{ 
-                color: 'white',
-                fontSize: '1.em',
-                marginBottom: '0em'
-              }}
-              >
-                Today's Profit: {profit}
-              </h3>
+              <>
+                <h3 style={{ 
+                  color: 'white',
+                  fontSize: '1.em',
+                  marginBottom: '1em'
+                }}
+                >
+                  Selling Total: {availableStockTotalCost.sellingTotal.toLocaleString()}
+                </h3>
+                <h3 style={{ 
+                  color: 'white',
+                  fontSize: '1.em',
+                  marginBottom: '1em'
+                }}
+                >
+                  Purchase Total: {availableStockTotalCost.purchaseTotal.toLocaleString()}
+                </h3>
+                <h3 style={{ 
+                  color: 'white',
+                  fontSize: '1.em',
+                  marginBottom: '1em'
+                }}
+                >
+                  Today's Profit: {profit}
+                </h3>
+              </>
+              
               : 
               ''
             }
@@ -379,6 +415,7 @@ const StorePage = (props) => {
           >
             { 
               availablesStock.map((item, index) => { 
+                // setAvailableStockTotalSellingCost(availableStockTotalSellingCost+item.sellingPrice)
                 return ( 
                   <div
                     id='storeStockItem'

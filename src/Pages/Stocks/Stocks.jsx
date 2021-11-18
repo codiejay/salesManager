@@ -119,7 +119,8 @@ const Stocks = (props) => {
   let [stockList, setStockList] = useState([]);
   let [runningOutStocks, setRunningOutStocks] = useState([]);
   let [outOfStock, setOutOfStock] = useState([]);
-  
+
+
   return ( 
     props.loggedIn 
     ? 
