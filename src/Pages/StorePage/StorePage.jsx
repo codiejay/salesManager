@@ -352,7 +352,7 @@ const StorePage = (props) => {
                   marginBottom: '1em'
                 }}
                 >
-                  Today'dds Profit: {profit}
+                  Today's Profit: {profit}
                 </h3>
               </>
               
